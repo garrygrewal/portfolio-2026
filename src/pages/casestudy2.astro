@@ -1,0 +1,91 @@
+---
+import CaseStudyLayout from '../layouts/CaseStudyLayout.astro';
+import Figure from '../components/Figure.astro';
+
+const metadata = [
+  { label: 'Platform', value: 'Web' },
+  { label: 'Roles', value: 'Product Design, Visual Design' },
+  { label: 'Year', value: '2024' },
+  { label: 'Tools', value: 'Figma, Framer' }
+];
+
+const metrics = [
+  { value: '##', label: 'Metric label one' },
+  { value: '##', label: 'Metric label two' },
+  { value: '##', label: 'Metric label three' }
+];
+---
+
+<CaseStudyLayout
+  title="Case Study Two"
+  description="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam rem aperiam eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo."
+  heroImageSrc="/placeholders/hero-1.svg"
+  heroImageAlt="Case Study Two Hero"
+  metadata={metadata}
+  metrics={metrics}
+>
+  <!-- Two-column layout: small left, large right -->
+  <div class="content-block-2col">
+    <Figure
+      src="/placeholders/image-left.svg"
+      alt="Left aligned image"
+      caption="Nemo enim ipsam voluptatem quia voluptas."
+    />
+    <Figure
+      src="/placeholders/image-right.svg"
+      alt="Right aligned larger image"
+      caption="Sit aspernatur aut odit aut fugit sed quia consequuntur magni dolores."
+    />
+  </div>
+
+  <!-- Text block -->
+  <div class="content-block-text">
+    <p>Neque porro quisquam est qui dolorem ipsum quia dolor sit amet consectetur adipisci velit sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.</p>
+  </div>
+
+  <!-- Full width image -->
+  <div class="content-block-full">
+    <Figure
+      src="/placeholders/image-full.svg"
+      alt="Full width image"
+      caption="Ut enim ad minima veniam quis nostrum exercitationem ullam corporis."
+    />
+  </div>
+
+  <!-- Offset right image -->
+  <div class="content-block-offset-right">
+    <Figure
+      src="/placeholders/image-small.svg"
+      alt="Right offset image"
+      caption="Suscipit laboriosam nisi ut aliquid ex ea commodi."
+    />
+  </div>
+
+  <!-- Text block -->
+  <div class="content-block-text">
+    <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.</p>
+  </div>
+
+  <!-- Large image -->
+  <div class="content-block-full">
+    <Figure
+      src="/placeholders/hero-1.svg"
+      alt="Large content image"
+      caption="Similique sunt in culpa qui officia deserunt mollitia animi id est laborum."
+    />
+  </div>
+
+  <!-- Two-up images at bottom -->
+  <div class="content-block-2up">
+    <Figure
+      src="/placeholders/square-1.svg"
+      alt="Two-up image left"
+      caption="Et harum quidem rerum facilis est et expedita distinctio."
+    />
+    <Figure
+      src="/placeholders/square-1.svg"
+      alt="Two-up image right"
+      caption="Nam libero tempore cum soluta nobis est eligendi optio cumque."
+    />
+  </div>
+</CaseStudyLayout>

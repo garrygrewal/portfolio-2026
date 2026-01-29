@@ -1,0 +1,63 @@
+---
+import Layout from './Layout.astro';
+import Divider from '../components/Divider.astro';
+import MetricsRow from '../components/MetricsRow.astro';
+
+interface Metric {
+  value: string;
+  label: string;
+}
+
+interface MetadataItem {
+  label: string;
+  value: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  heroImageSrc: string;
+  heroImageAlt: string;
+  metadata: MetadataItem[];
+  metrics: Metric[];
+}
+
+const { title, description, heroImageSrc, heroImageAlt, metadata, metrics } = Astro.props;
+---
+
+<Layout title={`${title} - Garry Grewal`}>
+  <!-- Hero Image -->
+  <div class="case-study-hero">
+    <img src={heroImageSrc} alt={heroImageAlt} class="case-study-hero-image" />
+  </div>
+
+  <!-- Title and Metadata Section -->
+  <div class="case-study-intro">
+    <div class="case-study-intro-content">
+      <h1 class="case-study-title">{title}</h1>
+      <p class="case-study-description">{description}</p>
+    </div>
+    <div class="case-study-metadata">
+      {metadata.map((item) => (
+        <div class="case-study-metadata-item">
+          <div class="case-study-metadata-label">{item.label}</div>
+          <div class="case-study-metadata-value">{item.value}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Divider -->
+  <Divider />
+
+  <!-- Metrics Row -->
+  <MetricsRow metrics={metrics} />
+
+  <!-- Divider -->
+  <Divider />
+
+  <!-- Content Slot -->
+  <div class="case-study-content">
+    <slot />
+  </div>
+</Layout>
