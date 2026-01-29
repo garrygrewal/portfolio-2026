@@ -1,20 +1,43 @@
 ---
-const title = "Garry Grewal";
-const subtitle = "Senior Product Designer";
+import Layout from '../layouts/Layout.astro';
 ---
 
-<html lang="en">
-  <head>
-  	<link rel="stylesheet" href="/src/styles/global.css" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>{title}</title>
-  </head>
-  <body>
-    <main>
-      <h1>{title}</h1>
-      <p>{subtitle}</p>
-      <p>Portfolio coming soon.</p>
-    </main>
-  </body>
-</html>
+<Layout title="Garry Grewal">
+  <div class="project-grid">
+    <!-- Wide tile at top -->
+    <a href="/casestudy1" class="tile tile-wide">
+      <img src="/placeholders/wide-1.svg" alt="Case Study 1" class="tile-image" />
+      <div class="tile-meta">
+        <span class="tile-title">Title</span>
+        <span class="tile-subtext">subtext</span>
+      </div>
+    </a>
+
+    <!-- Tall tile left -->
+    <a href="/casestudy2" class="tile tile-tall">
+      <img src="/placeholders/tall-1.svg" alt="Case Study 2" class="tile-image" />
+      <div class="tile-meta">
+        <span class="tile-title">Title</span>
+        <span class="tile-subtext">subtext</span>
+      </div>
+    </a>
+
+    <!-- Square tile right -->
+    <a href="/casestudy3" class="tile tile-square">
+      <img src="/placeholders/square-1.svg" alt="Case Study 3" class="tile-image" />
+      <div class="tile-meta">
+        <span class="tile-title">Title</span>
+        <span class="tile-subtext">subtext</span>
+      </div>
+    </a>
+
+    <!-- Wide tile near bottom -->
+    <a href="/casestudy4" class="tile tile-wide">
+      <img src="/placeholders/wide-2.svg" alt="Case Study 4" class="tile-image" />
+      <div class="tile-meta">
+        <span class="tile-title">Title</span>
+        <span class="tile-subtext">subtext</span>
+      </div>
+    </a>
+  </div>
+</Layout>
