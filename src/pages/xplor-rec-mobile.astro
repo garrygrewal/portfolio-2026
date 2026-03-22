@@ -1,0 +1,113 @@
+---
+import CaseStudyLayout from '../layouts/CaseStudyLayout.astro';
+import Figure from '../components/Figure.astro';
+
+const metadata = [
+  { label: 'Platform', values: ['Mobile'] },
+  { label: 'Roles', values: ['Product Design', 'UX Research'] }
+];
+
+const metrics = [
+  { value: '10k+', label: 'Active users in first year' },
+  { value: '$180k', label: 'Projected ARR in first year' },
+  { value: '6', label: 'Municipalities launched in first year' }
+];
+---
+
+<CaseStudyLayout
+  title="Xplor Rec Mobile App"
+  description="The first white-label native mobile app in the parks & recreation industry."
+  heroImageSrc="/images/rec-banner.webp"
+  heroImageAlt="Xplor Recreation Mobile App"
+  metadata={metadata}
+  metrics={metrics}
+>
+
+  <!-- Text block -->
+  <div class="content-block-text">
+    <p>As a Product Designer at Xplor Rec, I led design for the company's first white-label native mobile app for the parks & recreation industry. As the sole designer, I partnered cross-functionally to shape the end-to-end member experience, from browsing and booking to memberships, passes, and notifications, helping bring a new mobile product to market.</p>
+  </div>
+
+  <!-- Offset left image -->
+  <div class="content-block-offset-left">
+    <Figure
+      src="/images/rec-ios-android.webp"
+      alt="Full width image"
+      caption="Designed natively for both iOS and Android to create a more intuitive mobile experience."
+    />
+  </div>
+
+  <!-- Text block -->
+  <div class="content-block-text">
+    <p>The app introduced a new way for community members to interact with recreation centers and services from their phones. Instead of relying on fragmented web flows or in-person processes, members could browse programs, manage accounts, and access facilities through a single native experience.</p>
+  </div>
+
+  <!-- Full width image -->
+  <div class="content-block-full">
+    <Figure
+      src="/images/rec-mobile-4.webp"
+      alt="Right offset image"
+      caption="Core flows were designed to make program discovery and registration feel simple and connected."
+    />
+  </div>
+
+  <!-- Text block -->
+  <div class="content-block-text">
+    <p>Accessibility was a key consideration from the start, as the mobile app was designed to serve a wide range of community members. Designing natively allowed us to take advantage of built-in device accessibility controls and better support older users and others with varying needs.</p>
+  </div>
+
+  <!-- Offset left image -->
+  <div class="content-block-offset-left">
+    <Figure
+      src="/images/rec-accesibility.webp"
+      alt="Full width image"
+      caption="A native-first approach allowed the app to support built-in device accessibility settings like Dynamic Type."
+    />
+  </div>
+
+  <!-- Text block -->
+  <div class="content-block-text">
+    <p>Because the product was built as a white-label app, the experience needed to scale across different municipalities and organizations while still feeling cohesive. I designed a flexible UI system that could support multiple branded implementations without losing usability, consistency, or product clarity.</p>
+  </div>
+
+  <!-- Full width image -->
+  <div class="content-block-full">
+    <Figure
+      src="/images/rec-mobile-branding-1.webp"
+      alt="Large content image"
+      caption="A flexible white-label design system allowed the app to scale across different cities and recreation brands."
+    />
+  </div>
+
+  <!-- Offset right image -->
+  <div class="content-block-offset-right aspect-square">
+    <Figure
+      src="/images/rec-ai.webp"
+      alt="Full width image"
+      caption="Conversational search made it easier for members to find relevant programs using natural language."
+    />
+  </div>
+
+    <!-- Offset left image -->
+  <div class="content-block-offset-left">
+    <Figure
+      src="/images/rec-notifications.webp"
+      alt="Full width image"
+      caption="Push notifications helped keep members informed about bookings, reminders, and important updates."
+    />
+  </div>
+
+  <!-- Offset right image -->
+  <div class="content-block-offset-right aspect-square">
+    <Figure
+      src="/images/rec-wishlist.webp"
+      alt="Full width image"
+      caption="The experience extended beyond the core app with the ability to coordinate program registration."
+    />
+  </div>
+
+  <!-- Text block -->
+  <div class="content-block-text">
+    <p>The launch marked a major product expansion for Xplor Rec, bringing a modern native mobile experience to a category that had traditionally lagged behind consumer app experiences. In its first year, the app reached 10K+ active users, launched across 6 municipalities, and was projected to generate $180K in ARR.</p>
+  </div>
+</CaseStudyLayout>

@@ -1,0 +1,25 @@
+---
+import CaseStudyLayout from '../layouts/CaseStudyLayout.astro';
+import Figure from '../components/Figure.astro';
+
+const metadata = [
+  { label: 'Platform', values: ['Web'] },
+  { label: 'Roles', values: ['Product Design'] }
+];
+---
+
+<CaseStudyLayout
+  title="Q4 Capital Connect"
+  description="A web dashboard built to streamline investor relation workflows and unlock strategic insights across the capital markets."
+  heroVideo={{ webm: "/videos/q4-banner.webm" }}
+  heroImageAlt="Case Study Four Hero"
+  metadata={metadata}
+>
+
+<!-- Text block -->
+  <div class="content-block-text">
+    <p>As a Product Designer at Q4, I worked on Capital Connect, the company's flagship platform for Investor Relations teams at publicly traded companies. My role focused on improving adoption and simplifying key workflows as the product evolved into a central hub for Q4's broader application ecosystem.</p>
+    <p>Due to confidentiality, I'm unable to share screenshots or visual designs from this project publicly. Feel free to email me if you'd like to learn more about the work,</p>
+  </div>
+
+</CaseStudyLayout>

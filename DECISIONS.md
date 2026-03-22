@@ -12,10 +12,10 @@ Navigation
 
 URLs
 - /about
-- /casestudy1
-- /casestudy2
-- /casestudy3
-- /casestudy4
+- /mariana-tek-appointments
+- /mariana-tek-year-in-motion
+- /xplor-rec-mobile
+- /q4-capital-connect
 
 Visual system
 - Background: #ffffff

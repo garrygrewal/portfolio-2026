@@ -20,6 +20,7 @@ const { title = 'Garry Grewal' } = Astro.props;
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Darker+Grotesque:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
   </head>
   <body>
@@ -28,5 +29,76 @@ const { title = 'Garry Grewal' } = Astro.props;
       <slot />
     </main>
     <Footer />
+    <script type="module">
+    const setHeaderCenterWidth = () => {
+    const nav = document.querySelector('.header-nav');
+    if (!nav) return;
+    const width = Math.round(nav.getBoundingClientRect().width);
+    document.documentElement.style.setProperty('--header-center-width', `${width}px`);
+    };
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Auto-apply reveal to case study elements
+    const isCaseStudy = document.querySelector('.case-study-content, .case-study-hero, .case-study-intro');
+    if (isCaseStudy) {
+      const targets = document.querySelectorAll(
+        [
+          '.case-study-hero',
+          '.case-study-intro',
+          '.divider',
+          '.metrics-row',
+          '.case-study-section',
+          '.content-block-text',
+          '.content-block-full',
+          '.content-block-2col',
+          '.content-block-offset-right',
+          '.content-block-2up',
+          '.figure',
+          '.callout'
+        ].join(',')
+      );
+
+      targets.forEach((el, i) => {
+        el.classList.add('reveal');
+        // subtle stagger (optional)
+        el.style.setProperty('--reveal-delay', `${Math.min(i * 40, 240)}ms`);
+      });
+    }
+    const elements = Array.from(document.querySelectorAll('.reveal'));
+
+    if (elements.length === 0) {
+      // nothing
+    } else if (prefersReduced || !('IntersectionObserver' in window)) {
+      for (const el of elements) el.classList.add('is-visible');
+    } else {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target); // reveal once
+          }
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -10% 0px' }
+      );
+
+      for (const el of elements) observer.observe(el);
+    }
+    document.querySelectorAll('.tile').forEach((tile) => {
+      const video = tile.querySelector('video');
+      if (!video) return;
+      tile.addEventListener('mouseenter', () => video.pause());
+      tile.addEventListener('mouseleave', () => video.play());
+    });
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        setHeaderCenterWidth();
+        window.addEventListener('resize', setHeaderCenterWidth);
+      });
+    } else {
+      setHeaderCenterWidth();
+      window.addEventListener('resize', setHeaderCenterWidth);
+    }
+    </script>
   </body>
 </html>
