@@ -9,10 +9,10 @@ Portfolio site for Garry Grewal.
 Pages
 - `/` (Home)
 - `/about`
-- `/casestudy1`
-- `/casestudy2`
-- `/casestudy3`
-- `/casestudy4`
+- `/mariana-tek-appointments`
+- `/mariana-tek-year-in-motion`
+- `/xplor-rec-mobile`
+- `/q4-capital-connect`
 
 Header
 - “Garry Grewal” (links to `/`)

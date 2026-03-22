@@ -11,10 +11,76 @@ import Layout from '../layouts/Layout.astro';
       <a href="https://github.com/garrygrewal" target="_blank" rel="noopener noreferrer">github.com/garrygrewal</a>
       <a href="/resume.pdf" target="_blank">resume.pdf</a>
     </div>
-
     <!-- Right column: Bio -->
     <div class="about-bio">
-      <p>Quis non ipsum commodo nostrud aliquip proident voluptate minim cupidatat paratur dolore consequat culpa incididunt Lorem nulla enim adipisicing labore esse eiusmod magna exercitation.</p>
+      <p>I'm a Product Designer born and raised in Vancouver who loves turning complex problems into well-crafted experiences.</p>
+      <p>I've worked across SaaS and consumer products in industries like boutique fitness, recreation, fintech, and e-commerce, often on products with very different users and goals. Across all of these industries, I've found that the core of design always comes down to shaping how a product works, how it looks, and how it feels to use.</p>
+      <p>Feel free to reach out if you have any questions or just want to chat about design.</p>
     </div>
   </div>
+
+  <script is:inline>
+    (function() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      var images = [
+        '/images/about-images/IMG_0506.webp',
+        '/images/about-images/IMG_0599.webp',
+        '/images/about-images/IMG_0671 (1).webp',
+        '/images/about-images/IMG_0750 2 (1).webp',
+        '/images/about-images/IMG_2147.webp',
+        '/images/about-images/IMG_2176.webp',
+        '/images/about-images/IMG_2371.webp',
+        '/images/about-images/IMG_2700 3.webp',
+        '/images/about-images/IMG_2940.webp',
+        '/images/about-images/IMG_3379.webp',
+        '/images/about-images/IMG_3716 (1).webp',
+        '/images/about-images/IMG_5186.webp',
+        '/images/about-images/IMG_5423.webp',
+        '/images/about-images/IMG_5812.webp',
+        '/images/about-images/IMG_6879.webp',
+        '/images/about-images/IMG_9363.webp',
+        '/images/about-images/IMG_9490.webp'
+      ];
+
+      var shuffled = images.slice().sort(function() { return Math.random() - 0.5; });
+      var imgIndex = 0;
+      var lastX = 0;
+      var lastY = 0;
+
+      document.addEventListener('mousemove', function(e) {
+        var target = e.target;
+        if (target && target.closest && (target.closest('a') || target.closest('.about-links'))) return;
+
+        var dx = e.clientX - lastX;
+        var dy = e.clientY - lastY;
+        if (Math.sqrt(dx * dx + dy * dy) < 100) return;
+
+        lastX = e.clientX;
+        lastY = e.clientY;
+
+        var img = document.createElement('img');
+        img.src = shuffled[imgIndex];
+        imgIndex = (imgIndex + 1) % shuffled.length;
+        if (imgIndex === 0) shuffled = images.slice().sort(function() { return Math.random() - 0.5; });
+
+        img.style.cssText = 'position:fixed;z-index:9999;width:176px;height:132px;object-fit:cover;border-radius:8px;pointer-events:none;opacity:0;transform:scale(0.97);transform-origin:center center;transition:opacity 0.8s ease, transform 0.8s ease;left:' + (e.clientX - 88) + 'px;top:' + (e.clientY - 66) + 'px;';
+
+        document.body.appendChild(img);
+
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() {
+            img.style.opacity = '0.9';
+            img.style.transform = 'scale(1)';
+          });
+        });
+
+        setTimeout(function() {
+          img.style.transition = 'opacity 0.6s ease';
+          img.style.opacity = '0';
+          setTimeout(function() { img.remove(); }, 600);
+        }, 2000);
+      });
+    })();
+  </script>
 </Layout>

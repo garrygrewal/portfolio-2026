@@ -3,40 +3,53 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="Garry Grewal">
+
+
   <div class="project-grid">
+    <p class="home-bio">
+      Currently building tools for the fitness & wellbeing world at <a href="https://www.marianatek.com/" class="link-underline">Mariana Tek</a>.    
+    </p>
     <!-- Wide tile at top -->
-    <a href="/casestudy1" class="tile tile-1">
-      <img src="/placeholders/wide-1.svg" alt="Case Study 1" class="tile-image" />
-      <div class="tile-meta">
-        <span class="tile-title">Title</span>
-        <span class="tile-subtext">subtext</span>
+    <a href="/mariana-tek-appointments" class="tile tile-1 reveal">
+      <div class="tile-media">
+        <video class="tile-image" autoplay muted loop playsinline aria-label="Mariana Tek Appointments preview">
+          <source src="/videos/mtappointments_tile.webm" type="video/webm" />
+          <source src="/videos/mtappointments_tile.mp4" type="video/mp4" />
+        </video>
+        <span class="tile-hover-label">Mariana Tek Appointments</span>
+        <span class="tile-hover-description">A new scheduling and booking experience that enables boutique fitness studios to offer appointment-based services alongside classes.</span>
       </div>
     </a>
 
     <!-- Tall tile left -->
-    <a href="/casestudy2" class="tile tile-2">
-      <img src="/placeholders/tall-1.svg" alt="Case Study 2" class="tile-image" />
-      <div class="tile-meta">
-        <span class="tile-title">Title</span>
-        <span class="tile-subtext">subtext</span>
+    <a href="/mariana-tek-year-in-motion" class="tile tile-2 reveal">
+      <div class="tile-media">
+        <video class="tile-image" autoplay muted loop playsinline aria-label="Mariana Tek Year In Motion preview">
+          <source src="/videos/yearinmotion_tile.webm" type="video/webm" />
+          <source src="/videos/yearinmotion_tile.mp4" type="video/mp4" />
+        </video>
+        <span class="tile-hover-label">Mariana Tek Year In Motion</span>
+        <span class="tile-hover-description">A personalised end-of-year recap that highlights users' fitness journey.</span>
       </div>
     </a>
 
     <!-- Square tile right -->
-    <a href="/casestudy3" class="tile tile-3">
-      <img src="/placeholders/square-1.svg" alt="Case Study 3" class="tile-image" />
-      <div class="tile-meta">
-        <span class="tile-title">Title</span>
-        <span class="tile-subtext">subtext</span>
+    <a href="/xplor-rec-mobile" class="tile tile-3 reveal">
+      <div class="tile-media">
+        <img src="/images/rec-banner.webp" alt="Variations of the Xplor Rec mobile app for different municipalities" class="tile-image" />
+        <span class="tile-hover-label">Xplor Recreation Mobile App</span>
+        <span class="tile-hover-description">The first white-label native mobile app in the parks & recreation industry.</span>
       </div>
     </a>
 
     <!-- Wide tile near bottom -->
-    <a href="/casestudy4" class="tile tile-4">
-      <img src="/placeholders/wide-2.svg" alt="Case Study 4" class="tile-image" />
-      <div class="tile-meta">
-        <span class="tile-title">Title</span>
-        <span class="tile-subtext">subtext</span>
+    <a href="/q4-capital-connect" class="tile tile-4 reveal">
+      <div class="tile-media">
+        <video class="tile-image" autoplay muted loop playsinline aria-label="Q4 Inc. preview">
+          <source src="/videos/q4-banner.webm" type="video/webm" />
+        </video>
+        <span class="tile-hover-label">Q4 Capital Connect</span>
+        <span class="tile-hover-description">A web dashboard built to streamline investor relation workflows and unlock strategic insights across the capital markets.</span>
       </div>
     </a>
   </div>

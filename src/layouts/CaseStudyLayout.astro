@@ -10,48 +10,57 @@ interface Metric {
 
 interface MetadataItem {
   label: string;
-  value: string;
+  values: string[];
 }
 
 interface Props {
   title: string;
   description: string;
-  heroImageSrc: string;
+  heroImageSrc?: string;
   heroImageAlt: string;
+  heroVideo?: { webm: string; mp4?: string };
   metadata: MetadataItem[];
-  metrics: Metric[];
+  metrics?: Metric[];
 }
 
-const { title, description, heroImageSrc, heroImageAlt, metadata, metrics } = Astro.props;
+const { title, description, heroImageSrc, heroImageAlt, heroVideo, metadata, metrics } = Astro.props;
 ---
 
 <Layout title={`${title} - Garry Grewal`}>
-  <!-- Hero Image -->
-  <div class="case-study-hero">
-    <img src={heroImageSrc} alt={heroImageAlt} class="case-study-hero-image" />
-  </div>
-
   <!-- Title and Metadata Section -->
   <div class="case-study-intro">
-    <div class="case-study-intro-content">
-      <h1 class="case-study-title">{title}</h1>
+    <h1 class="case-study-title">{title}</h1>
+    <div class="case-study-intro-row">
       <p class="case-study-description">{description}</p>
-    </div>
-    <div class="case-study-metadata">
-      {metadata.map((item) => (
-        <div class="case-study-metadata-item">
-          <div class="case-study-metadata-label">{item.label}</div>
-          <div class="case-study-metadata-value">{item.value}</div>
-        </div>
-      ))}
+      <div class="case-study-metadata">
+        {metadata.map((item) => (
+          <div class="case-study-metadata-item">
+            <div class="case-study-metadata-label">{item.label}</div>
+            <div class="case-study-metadata-values">
+              {item.values.map((value) => (
+                <span class="case-study-metadata-value">{value}</span>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 
-  <!-- Divider -->
-  <Divider />
+  <!-- Hero Image or Video -->
+  <div class="case-study-hero">
+    {heroVideo ? (
+      <video class="case-study-hero-image" autoplay muted loop playsinline aria-label={heroImageAlt}>
+        <source src={heroVideo.webm} type="video/webm" />
+        {heroVideo.mp4 && <source src={heroVideo.mp4} type="video/mp4" />}
+      </video>
+    ) : heroImageSrc ? (
+      <img src={heroImageSrc} alt={heroImageAlt} class="case-study-hero-image" />
+    ) : null}
+  </div>
 
   <!-- Metrics Row -->
-  <MetricsRow metrics={metrics} />
+  {metrics && metrics.length > 0 && <MetricsRow metrics={metrics} />}
 
   <!-- Divider -->
   <Divider />

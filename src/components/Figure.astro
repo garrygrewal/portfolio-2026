@@ -1,14 +1,21 @@
 ---
 interface Props {
-  src: string;
+  src?: string;
   alt: string;
   caption?: string;
+  videoSrc?: string;
 }
 
-const { src, alt, caption } = Astro.props;
+const { src, alt, caption, videoSrc } = Astro.props;
 ---
 
 <figure class="figure">
-  <img src={src} alt={alt} class="figure-image" />
+  {videoSrc ? (
+    <video class="figure-image" autoplay muted loop playsinline aria-label={alt}>
+      <source src={videoSrc} type="video/webm" />
+    </video>
+  ) : src ? (
+    <img src={src} alt={alt} class="figure-image" />
+  ) : null}
   {caption && <figcaption class="figure-caption">{caption}</figcaption>}
 </figure>

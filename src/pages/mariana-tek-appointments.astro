@@ -1,0 +1,94 @@
+---
+import CaseStudyLayout from '../layouts/CaseStudyLayout.astro';
+import Figure from '../components/Figure.astro';
+
+const metadata = [
+  { label: 'Platform', values: ['Web', 'Mobile'] },
+  { label: 'Roles', values: ['Product Design', 'UX Research'] }
+];
+
+const metrics = [
+  { value: '1200+', label: 'Appointments booked in first 3 months' },
+  { value: '$140k', label: 'Potential MRR unlocked' },
+  { value: '11', label: 'Studios onboarded into Beta in first 3 months' }
+];
+---
+
+<CaseStudyLayout
+  title="Mariana Tek Appointments"
+  description="A new scheduling and booking experience that enables boutique fitness studios to offer appointment-based services alongside classes."
+  heroVideo={{ webm: "/videos/mtappointments_tile.webm", mp4: "/videos/mtappointments_tile.mp4" }}
+  heroImageAlt="Mariana Tek Appointments Hero"
+  metadata={metadata}
+  metrics={metrics}
+>
+  <!-- Text block (below hero) -->
+  <div class="content-block-text">
+    <p>As a Product Designer at Mariana Tek, I led design for the company's first appointments feature, expanding the platform beyond class-based booking. As the sole designer on the initiative, I worked across multiple teams to shape how studios configure, sell, and manage services, and how consumers discover, book, and manage appointments.</p>
+  </div>
+
+  <!-- Offset right image -->
+  <div class="content-block-offset-right">
+    <Figure
+      src="/images/mt-appts-desktop.webp"
+      alt="Placeholder image"
+      caption="The appointments calendar gave studio staff a centralized view for managing schedules across trainers, resources, and services."
+    />
+  </div>
+
+  <!-- Offset left image -->
+  <div class="content-block-offset-left">
+    <Figure
+      src="/images/mt-appts-mobilecategories.webp"
+      alt="Full width image"
+      caption="The consumer schedule expanded beyond classes to support new services like personal training, and recovery offerings."
+    />
+  </div>
+
+  <!-- Text block -->
+  <div class="content-block-text">
+      <p>Mariana Tek had long supported class-based scheduling, but studios also needed a way to offer services like personal training and recovery appointments. Appointments introduced a new operational model to the platform, helping studios manage one-on-one and small-group services within the same ecosystem.</p>
+  </div>
+
+  <!-- Offset right image -->
+  <div class="content-block-offset-right">
+    <Figure
+          videoSrc="/videos/mtappointments_adminmenu.webm"
+          alt="Admin menu for managing appointments"
+          caption="A separate admin calendar for studios to manage and book appointments."
+        />
+  </div>
+
+  <!-- Text block -->
+  <div class="content-block-text">
+    <p>Boutique fitness studios do not offer appointments in just one format. The experience was designed to support a wide range of services, from personal training and private pilates to sauna and guided recovery sessions, while keeping setup and booking intuitive across web and mobile.</p>
+  </div>
+
+  <!-- Full width image -->
+  <div class="content-block-full">
+    <Figure
+      src="/images/mt-appts-consumer-app.webp"
+      alt="Mariana Tek Appointments consumer app"
+      caption="Service detail pages on the white-label consumer mobile apps."
+    />
+  </div>
+
+  <!-- Text block -->
+  <div class="content-block-text">
+    <p>The feature had to work across both sides of the business: internal staff managing schedules, availability, and setup, and consumers browsing and booking services. Designing across both touchpoints helped ensure the experience felt connected from studio operations to checkout.</p>
+  </div>
+
+  <!-- Two-up images at bottom -->
+  <div class="content-block-2up">
+    <Figure
+      src="/images/mt-appts-admin.webp"
+      alt="Two-up image left"
+      caption="Studios manage appointments through the web admin dashboard and mobile business app."
+    />
+    <Figure
+      src="/images/mt-appts-consumer.webp"
+      alt="Two-up image right"
+      caption="Consumers book appointments through the studio's website or mobile app."
+    />
+  </div>
+</CaseStudyLayout>

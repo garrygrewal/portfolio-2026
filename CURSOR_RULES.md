@@ -3,7 +3,7 @@
 Follow these rules for all changes in this repo.
 
 ## Pages and routes
-- Pages: /, /about, /casestudy1-4
+- Pages: /, /about, /mariana-tek-appointments, /mariana-tek-year-in-motion, /xplor-rec-mobile, /q4-capital-connect
 - Header: "Garry Grewal" -> /, "About" -> /about
 - Footer: "Garry Grewal" -> /, email -> mailto
 
