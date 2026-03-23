@@ -1,6 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
 import '../styles/global.css';
 
 interface Props {
@@ -30,6 +31,7 @@ const { title = 'Garry Grewal' } = Astro.props;
       <slot />
     </main>
     <Footer />
+    <SpeedInsights />
     <script type="module">
     const setHeaderCenterWidth = () => {
     const nav = document.querySelector('.header-nav');
