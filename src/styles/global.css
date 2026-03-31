@@ -624,6 +624,13 @@ main {
   margin-bottom: var(--space-32);
 }
 
+@media (max-width: 767px) {
+  .case-study-title {
+    font-size: clamp(40px, 11vw, 64px);
+    overflow-wrap: anywhere;
+  }
+}
+
 .case-study-intro-row {
   display: flex;
   flex-wrap: wrap;
@@ -759,7 +766,7 @@ main {
 }
 
 .figure-caption {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--color-muted);
   margin-top: var(--space-8);
@@ -866,6 +873,12 @@ main {
 
 .content-block-text p + p {
   margin-top: var(--space-48);
+}
+
+@media (max-width: 767px) {
+  .content-block-text {
+    max-width: 100%;
+  }
 }
 
 .content-block-full {
