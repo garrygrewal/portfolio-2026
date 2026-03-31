@@ -804,6 +804,11 @@ main {
 }
 
 @media (max-width: 767px) {
+  .content-block-2col .figure {
+    max-width: 100%;
+    margin: 0;
+  }
+
   .content-block-2col-top {
     flex-direction: column;
     align-items: stretch;
@@ -937,6 +942,10 @@ main {
 .content-block-offset-left .figure-image {
   aspect-ratio: 1 / 1;
   object-fit: cover;
+}
+
+.content-block-offset-left.aspect-square .figure-image {
+  aspect-ratio: 1 / 1;
 }
 
 @media (min-width: 768px) {
