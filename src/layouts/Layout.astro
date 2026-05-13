@@ -86,13 +86,6 @@ const { title = 'Garry Grewal' } = Astro.props;
 
       for (const el of elements) observer.observe(el);
     }
-    document.querySelectorAll('.tile').forEach((tile) => {
-      const video = tile.querySelector('video');
-      if (!video) return;
-      tile.addEventListener('mouseenter', () => video.pause());
-      tile.addEventListener('mouseleave', () => video.play());
-    });
-
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', () => {
         setHeaderCenterWidth();

@@ -4,8 +4,52 @@
 <header class="header">
   <div class="header-content">
     <a href="/" class="header-logo">Garry Grewal</a>
-    <nav class="header-nav">
+    <button class="header-menu-toggle" type="button" aria-expanded="false" aria-controls="header-nav" aria-label="Open navigation">
+      <span class="header-menu-icon" aria-hidden="true">
+        <span class="header-menu-line"></span>
+        <span class="header-menu-line"></span>
+        <span class="header-menu-line"></span>
+      </span>
+    </button>
+    <nav class="header-nav" id="header-nav">
+      <a href="/">Work</a>
+      <a href="/explorations">Explorations</a>
       <a href="/about">About</a>
     </nav>
   </div>
 </header>
+
+<script>
+  const header = document.querySelector('.header');
+  const toggle = document.querySelector('.header-menu-toggle');
+  const nav = document.querySelector('.header-nav');
+
+  if (header && toggle && nav) {
+    const closeMenu = () => {
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Open navigation');
+      header.classList.remove('is-menu-open');
+      nav.classList.remove('is-open');
+    };
+
+    toggle.addEventListener('click', () => {
+      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      toggle.setAttribute('aria-expanded', String(!isOpen));
+      toggle.setAttribute('aria-label', isOpen ? 'Open navigation' : 'Close navigation');
+      header.classList.toggle('is-menu-open', !isOpen);
+      nav.classList.toggle('is-open', !isOpen);
+    });
+
+    nav.addEventListener('click', (event) => {
+      if (event.target instanceof HTMLAnchorElement) closeMenu();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closeMenu();
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) closeMenu();
+    });
+  }
+</script>
