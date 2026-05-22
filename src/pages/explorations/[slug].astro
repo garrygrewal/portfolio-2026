@@ -1,0 +1,50 @@
+---
+import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
+import Figure from '../../components/Figure.astro';
+import { explorationProjects, type ExplorationProject } from '../../data/explorations';
+
+export const prerender = true;
+
+export function getStaticPaths() {
+  return explorationProjects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project }
+  }));
+}
+
+interface Props {
+  project: ExplorationProject;
+}
+
+const { project } = Astro.props;
+
+const metadata = [
+  { label: 'Year', values: [project.year] },
+  { label: 'Medium', values: [project.medium] },
+  { label: 'Status', values: [project.status] }
+];
+---
+
+<CaseStudyLayout
+  title={project.title}
+  description={project.description}
+  heroImageSrc={project.heroImageSrc}
+  heroImageAlt={project.heroImageAlt}
+  metadata={metadata}
+>
+  <div class="content-block-text">
+    {project.body.map((paragraph) => <p>{paragraph}</p>)}
+  </div>
+
+  <div class="content-block-offset-right aspect-square">
+    <Figure
+      src={project.heroImageSrc}
+      alt={project.heroImageAlt}
+      caption={project.caption}
+    />
+  </div>
+
+  <div class="content-block-text">
+    <p>This is a placeholder exploration page. The structure is ready for final writing, real process images, and more detailed notes once this project becomes something worth properly documenting.</p>
+  </div>
+</CaseStudyLayout>

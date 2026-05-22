@@ -1,13 +1,11 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import ExplorationsHero from '../components/ExplorationsHero.astro';
+import { explorationProjects } from '../data/explorations';
 ---
 
-<Layout title="Garry Grewal">
-  <div class="project-grid explorations-page">
-    <div class="explorations-hero">
-      <p class="home-bio">
-        A collection of half-baked (some fully-baked) projects that I've explored over the years.
-      </p>
-    </div>
+<Layout title="Explorations - Garry Grewal">
+  <div class="explorations-page">
+    <ExplorationsHero projects={explorationProjects} />
   </div>
 </Layout>

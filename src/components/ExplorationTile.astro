@@ -1,0 +1,26 @@
+---
+import type { ExplorationProject } from '../data/explorations';
+
+interface Props {
+  project: ExplorationProject;
+  mode?: 'scatter' | 'grid';
+  index?: number;
+}
+
+const { project, mode = 'grid', index = 0 } = Astro.props;
+const href = `/explorations/${project.slug}`;
+---
+
+<a
+  href={href}
+  class={`exploration-tile exploration-tile--${mode} exploration-tile--${project.size}`}
+  aria-label={project.title}
+  data-exploration-tile={mode === 'scatter' ? '' : undefined}
+  data-size={project.size}
+  data-index={index}
+  style={`--tile-accent: ${project.accent};`}
+>
+  <span class="exploration-tile-media" aria-hidden="true">
+    <img src={project.heroImageSrc} alt="" class="exploration-tile-image" loading={mode === 'scatter' ? 'eager' : 'lazy'} />
+  </span>
+</a>
