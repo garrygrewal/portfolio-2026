@@ -18,7 +18,7 @@ interface Props {
   description: string;
   heroImageSrc?: string;
   heroImageAlt: string;
-  heroVideo?: { webm: string; mp4?: string };
+  heroVideo?: { webm?: string; mp4?: string };
   metadata: MetadataItem[];
   metrics?: Metric[];
 }
@@ -51,7 +51,7 @@ const { title, description, heroImageSrc, heroImageAlt, heroVideo, metadata, met
   <div class="case-study-hero">
     {heroVideo ? (
       <video class="case-study-hero-image" autoplay muted loop playsinline aria-label={heroImageAlt}>
-        <source src={heroVideo.webm} type="video/webm" />
+        {heroVideo.webm && <source src={heroVideo.webm} type="video/webm" />}
         {heroVideo.mp4 && <source src={heroVideo.mp4} type="video/mp4" />}
       </video>
     ) : heroImageSrc ? (

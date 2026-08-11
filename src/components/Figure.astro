@@ -12,7 +12,7 @@ const { src, alt, caption, videoSrc } = Astro.props;
 <figure class="figure">
   {videoSrc ? (
     <video class="figure-image" autoplay muted loop playsinline aria-label={alt}>
-      <source src={videoSrc} type="video/webm" />
+      <source src={videoSrc} type={videoSrc.endsWith('.mp4') ? 'video/mp4' : 'video/webm'} />
     </video>
   ) : src ? (
     <img src={src} alt={alt} class="figure-image" />

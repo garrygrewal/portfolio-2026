@@ -6,10 +6,15 @@ import { explorationProjects, type ExplorationProject } from '../../data/explora
 export const prerender = true;
 
 export function getStaticPaths() {
-  return explorationProjects.map((project) => ({
-    params: { slug: project.slug },
-    props: { project }
-  }));
+  // These slugs have their own hand-authored pages in this directory,
+  // so they're excluded here to avoid generating duplicate routes for them.
+  const handAuthored = ['click-here-to-get-candy', 'patagonia-worn-wear', 'youme', 'airduino-hockey'];
+  return explorationProjects
+    .filter((project) => !handAuthored.includes(project.slug))
+    .map((project) => ({
+      params: { slug: project.slug },
+      props: { project }
+    }));
 }
 
 interface Props {
@@ -19,9 +24,8 @@ interface Props {
 const { project } = Astro.props;
 
 const metadata = [
-  { label: 'Year', values: [project.year] },
-  { label: 'Medium', values: [project.medium] },
-  { label: 'Status', values: [project.status] }
+  { label: 'Platform', values: [project.platform] },
+  { label: 'Roles', values: [project.roles] }
 ];
 ---
 
@@ -29,16 +33,18 @@ const metadata = [
   title={project.title}
   description={project.description}
   heroImageSrc={project.heroImageSrc}
+  heroVideo={project.heroVideo}
   heroImageAlt={project.heroImageAlt}
   metadata={metadata}
 >
   <div class="content-block-text">
-    {project.body.map((paragraph) => <p>{paragraph}</p>)}
+    {project.body?.map((paragraph) => <p>{paragraph}</p>)}
   </div>
 
-  <div class="content-block-offset-right aspect-square">
+  <div class="content-block-offset-right">
     <Figure
       src={project.heroImageSrc}
+      videoSrc={project.heroVideo?.webm ?? project.heroVideo?.mp4}
       alt={project.heroImageAlt}
       caption={project.caption}
     />

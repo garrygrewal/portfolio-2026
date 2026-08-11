@@ -1,0 +1,59 @@
+---
+import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
+import Figure from '../../components/Figure.astro';
+
+const metadata = [
+  { label: 'Platform', values: ['Art Installation'] },
+  { label: 'Roles', values: ['Interaction Designer'] }
+];
+---
+
+<CaseStudyLayout
+  title="Click Here to Get Candy"
+  description="An interactive art installation that highlights the potential dangers of artificial intelligence"
+  heroImageSrc="/images/explorations/candy-machine.webp"
+  heroImageAlt="Painted concept sketch of the candy dispenser shown from the front, side, and three-quarter angles."
+  metadata={metadata}
+>
+  <!-- Context -->
+  <div class="content-block-text">
+    <p>Click Here to Get Candy is an AI-powered candy dispensing system that only gives candy to people an algorithm decides are eligible, maximizing the "utility" of each piece by making sure the right person gets it. The installation is meant to highlight the potential dangers of misused technology, and how an algorithm inherits the values and ideology of whoever built it.</p>
+  </div>
+
+  <div class="content-block-offset-left natural-aspect">
+    <Figure
+      src="/images/explorations/candy-interaction-diagram.webp"
+      alt="Six-step interaction diagram: press Get Candy, enter a name, pick a number, a visual analyzer scans the participant's face, their collected information is shown, then the machine dispenses or withholds candy."
+      caption="Interaction diagram."
+    />
+  </div>
+
+  <div class="content-block-offset-right">
+    <Figure
+      src="/images/explorations/candy-display.webp"
+      alt="The installation on a table inside a mesh display booth, with a sign reading Click Here To Get Candy."
+      caption="The final model shown on display at a showcase. Participants were invited to interact with the artwork."
+    />
+  </div>
+
+  <div class="content-block-full">
+    <Figure
+      videoSrc="/videos/explorations/candy-full-video.mp4"
+      alt="Someone using the Click Here to Get Candy installation, pressing the button and watching the machine decide whether to dispense candy."
+      caption="The finished installation in use."
+    />
+  </div>
+
+  <div class="content-block-full">
+    <Figure
+      videoSrc="/videos/explorations/candy-interface-video.mp4"
+      alt="Screen recording of the web interface analyzing a participant's photo and displaying their extracted age, sex, and mood."
+      caption="The interface reading a participant's photo to estimate age, sex, and mood."
+    />
+  </div>
+
+  <!-- Reflection -->
+  <div class="content-block-text">
+    <p>This piece was meant to make the dangers of misused technology tangible: how an algorithm inherits the values and ideology of its creator. The project helped me grow as a programmer, experiment with different interaction mediums, and examine different kinds of interactions.</p>
+  </div>
+</CaseStudyLayout>

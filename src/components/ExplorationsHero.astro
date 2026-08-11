@@ -26,6 +26,10 @@ const { projects } = Astro.props;
     <button class="explorations-scroll-cue" type="button" data-explorations-scroll-cue aria-label="Show next exploration tile">
       <span class="explorations-scroll-cue-arrow" aria-hidden="true"></span>
     </button>
+
+    <button class="explorations-scroll-cue explorations-scroll-cue--up" type="button" data-explorations-scroll-cue-up aria-label="Show previous exploration tile">
+      <span class="explorations-scroll-cue-arrow" aria-hidden="true"></span>
+    </button>
   </div>
 </section>
 
@@ -38,6 +42,7 @@ const { projects } = Astro.props;
     if (!tiles.length) return;
 
     var scrollCue = hero.querySelector('[data-explorations-scroll-cue]');
+    var scrollCueUp = hero.querySelector('[data-explorations-scroll-cue-up]');
     var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     var desktopZones = [
@@ -79,8 +84,8 @@ const { projects } = Astro.props;
       return Math.min(Math.max(value, min), max);
     };
 
-    var tileOrder = shuffle(tiles).slice(0, 9);
-    var visibleCount = 3;
+    var tileOrder = tiles.slice(0, 9);
+    var visibleCount = 2;
     var maxStart = Math.max(tileOrder.length - visibleCount, 0);
     var currentMode = null;
     var currentPosition = 0;
@@ -93,7 +98,7 @@ const { projects } = Astro.props;
     var cueDismissed = false;
 
     var updateCue = function() {
-      if (!scrollCue) return;
+      if (!scrollCue && !scrollCueUp) return;
 
       var isAtStart = Math.round(targetPosition) === 0 && Math.abs(currentPosition) < 0.05;
       var isAtEnd = Math.round(targetPosition) >= maxStart && Math.abs(currentPosition - maxStart) < 0.05;
@@ -101,7 +106,12 @@ const { projects } = Astro.props;
       if (isAtEnd) cueDismissed = true;
       if (isAtStart) cueDismissed = false;
 
-      scrollCue.classList.toggle('is-visible', introComplete && cueReady && !cueDismissed);
+      if (scrollCue) {
+        scrollCue.classList.toggle('is-visible', introComplete && cueReady && !cueDismissed);
+      }
+      if (scrollCueUp) {
+        scrollCueUp.classList.toggle('is-visible', introComplete && cueReady && isAtEnd);
+      }
     };
 
     var placeBatches = function(force) {
@@ -262,7 +272,7 @@ const { projects } = Astro.props;
     if (reducedMotion.matches) {
       startTiles();
     } else {
-      window.setTimeout(startTiles, 1200);
+      window.setTimeout(startTiles, 2000);
     }
 
     hero.addEventListener('wheel', handleWheel, { passive: false });
@@ -271,6 +281,11 @@ const { projects } = Astro.props;
     if (scrollCue) {
       scrollCue.addEventListener('click', function() {
         moveTiles(1);
+      });
+    }
+    if (scrollCueUp) {
+      scrollCueUp.addEventListener('click', function() {
+        moveTiles(-1);
       });
     }
     window.addEventListener('keydown', handleKeydown);

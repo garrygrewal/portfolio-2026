@@ -1,172 +1,68 @@
-export type ExplorationSize = 'large' | 'medium' | 'small';
+export type ExplorationSize = 'wide' | 'large' | 'medium' | 'small';
 
 export interface ExplorationProject {
   title: string;
   slug: string;
   description: string;
-  year: string;
-  medium: string;
-  status: string;
+  platform: string;
+  roles: string;
   size: ExplorationSize;
   accent: string;
-  heroImageSrc: string;
+  heroImageSrc?: string;
+  heroVideo?: { webm?: string; mp4?: string };
   heroImageAlt: string;
-  body: string[];
-  caption: string;
+  body?: string[];
+  caption?: string;
 }
 
 export const explorationProjects: ExplorationProject[] = [
   {
-    title: 'Receipt Garden',
-    slug: 'receipt-garden',
-    description: 'A tiny tool for turning everyday purchases into personal spending patterns.',
-    year: '2026',
-    medium: 'Web prototype',
-    status: 'Half-baked',
+    title: 'Click Here to Get Candy',
+    slug: 'click-here-to-get-candy',
+    description: 'An interactive art installation that highlights the potential dangers of artificial intelligence',
+    platform: 'Art Installation',
+    roles: 'Interaction Designer',
     size: 'large',
-    accent: '#86d8c7',
-    heroImageSrc: '/placeholders/wide-1.svg',
-    heroImageAlt: 'Wide gray placeholder image.',
-    body: [
-      'Receipt Garden started as a sketch for making personal spending feel less like a spreadsheet and more like a living archive.',
-      'The prototype explores lightweight categorization, soft visual summaries, and a calmer way to notice habits without turning the experience into a finance dashboard.'
-    ],
-    caption: 'Placeholder visual for the receipt clustering concept.'
+    accent: '#c8422a',
+    heroImageSrc: '/images/explorations/candy-machine.webp',
+    heroImageAlt: 'Painted concept sketch of the candy dispenser shown from the front, side, and three-quarter angles.'
   },
   {
-    title: 'Moodboard Radio',
-    slug: 'moodboard-radio',
-    description: 'A browser experiment that pairs visual references with loose audio moods.',
-    year: '2025',
-    medium: 'Interaction study',
-    status: 'In progress',
-    size: 'medium',
-    accent: '#f0b56b',
-    heroImageSrc: '/placeholders/square-1.svg',
-    heroImageAlt: 'Square gray placeholder image.',
-    body: [
-      'Moodboard Radio is a small experiment in using sound as part of visual research.',
-      'The idea is to let a moodboard carry tempo, texture, and energy alongside images so early design directions feel easier to compare.'
-    ],
-    caption: 'Placeholder visual for a mixed media moodboard interface.'
+    title: 'Patagonia: Worn Wear',
+    slug: 'patagonia-worn-wear',
+    description: 'A digital experience that surfaces Patagonia’s second-hand Worn Wear program inside the main shopping flow.',
+    platform: 'Web',
+    roles: 'Research, Interaction, Content',
+    size: 'wide',
+    accent: '#c9a227',
+    heroVideo: { mp4: '/videos/explorations/patagonia-home-banner.mp4' },
+    heroImageAlt: 'Animated Patagonia Worn Wear concept showing second-hand gear presented alongside new products.'
   },
   {
-    title: 'Calendar Confetti',
-    slug: 'calendar-confetti',
-    description: 'A scheduling concept that celebrates small planning wins without getting noisy.',
-    year: '2025',
-    medium: 'Motion sketch',
-    status: 'Sketch',
-    size: 'small',
-    accent: '#d9ca7a',
-    heroImageSrc: '/placeholders/tall-1.svg',
-    heroImageAlt: 'Tall gray placeholder image.',
-    body: [
-      'Calendar Confetti asks what it would feel like if planning tools acknowledged progress in a quieter way.',
-      'The prototype focuses on restraint: small moments of feedback, clear scheduling states, and motion that stays out of the way.'
-    ],
-    caption: 'Placeholder visual for a restrained scheduling celebration.'
-  },
-  {
-    title: 'Pocket Wayfinder',
-    slug: 'pocket-wayfinder',
-    description: 'A mapless navigation idea for remembering places through cues and routines.',
-    year: '2024',
-    medium: 'Mobile concept',
-    status: 'Dormant',
-    size: 'medium',
-    accent: '#8db7f0',
-    heroImageSrc: '/placeholders/image-left.svg',
-    heroImageAlt: 'Gray placeholder image.',
-    body: [
-      'Pocket Wayfinder came from thinking about navigation without constant map dependence.',
-      'The placeholder flow explores landmarks, recurring routes, and lightweight prompts that help someone rebuild their sense of place.'
-    ],
-    caption: 'Placeholder visual for a mobile wayfinding concept.'
-  },
-  {
-    title: 'Type Tester',
-    slug: 'type-tester',
-    description: 'A fast playground for comparing type choices in realistic product UI fragments.',
-    year: '2024',
-    medium: 'Design tool',
-    status: 'Useful mess',
-    size: 'small',
-    accent: '#f08f8a',
-    heroImageSrc: '/placeholders/image-small.svg',
-    heroImageAlt: 'Small gray placeholder image.',
-    body: [
-      'Type Tester is a practical little workspace for judging type in context instead of in isolated specimen sheets.',
-      'The experiment uses repeated UI fragments, density changes, and contrast checks to make type decisions feel less theoretical.'
-    ],
-    caption: 'Placeholder visual for contextual typography testing.'
-  },
-  {
-    title: 'Signal Tiles',
-    slug: 'signal-tiles',
-    description: 'A modular dashboard study for showing weak signals before they become metrics.',
-    year: '2023',
-    medium: 'Dashboard study',
-    status: 'Prototype',
-    size: 'large',
-    accent: '#a7d06d',
-    heroImageSrc: '/placeholders/wide-2.svg',
-    heroImageAlt: 'Wide gray placeholder image.',
-    body: [
-      'Signal Tiles explores how early patterns might surface before a team has enough data for confident reporting.',
-      'The study mixes qualitative notes, small counts, and confidence states so the interface can show uncertainty honestly.'
-    ],
-    caption: 'Placeholder visual for modular signal tracking.'
-  },
-  {
-    title: 'Checkout Sketches',
-    slug: 'checkout-sketches',
-    description: 'A set of small checkout experiments focused on trust, speed, and repair.',
-    year: '2023',
-    medium: 'UX patterns',
-    status: 'Archived',
-    size: 'medium',
+    title: 'YouMe',
+    slug: 'youme',
+    description: 'An inclusive sexual education app for LGBTQ+ youth',
+    platform: 'Mobile',
+    roles: 'Interaction Design, User Research',
+    size: 'wide',
     accent: '#b49af2',
-    heroImageSrc: '/placeholders/image-right.svg',
-    heroImageAlt: 'Gray placeholder image.',
-    body: [
-      'Checkout Sketches collects small ideas around moments where commerce flows tend to break down.',
-      'The exploration looks at form repair, trust signals, and making payment states feel direct without becoming cold.'
-    ],
-    caption: 'Placeholder visual for checkout interaction patterns.'
+    heroVideo: { webm: '/videos/explorations/youme-home-banner.webm', mp4: '/videos/explorations/youme-home-banner.mp4' },
+    heroImageAlt: 'Animated purple mascot character walking in front of a green chalkboard listing sex education topics.'
   },
   {
-    title: 'Studio Snack Bar',
-    slug: 'studio-snack-bar',
-    description: 'A playful inventory idea for boutique studios selling small add-ons.',
-    year: '2022',
-    medium: 'Product sketch',
-    status: 'Paused',
-    size: 'small',
-    accent: '#f2d2a2',
-    heroImageSrc: '/placeholders/image-full.svg',
-    heroImageAlt: 'Full-width gray placeholder image.',
+    title: 'Airduino Hockey',
+    slug: 'airduino-hockey',
+    description: 'An air hockey table powered by Arduino.',
+    platform: 'Air Hockey Table',
+    roles: 'Programmer',
+    size: 'large',
+    accent: '#c8422a',
+    heroImageSrc: '/images/explorations/airduino-hockey.webp',
+    heroImageAlt: 'Airduino Hockey game screen showing a rink, a centre-ice logo, and two player scoreboards set to zero.',
     body: [
-      'Studio Snack Bar is a small retail sketch for classes, events, and front-desk add-ons.',
-      'The concept explores lightweight inventory, staff-friendly checkout, and making small purchases feel native to a studio visit.'
+      'Airduino Hockey is a two-player game built around physical controls: the rink, the scoreboards, and the puck all live on screen, but the input comes from an Arduino rig rather than a keyboard.',
+      'Most of the work went into the feel of the thing: reading sensor input cleanly enough that a fast rally still feels fair, and keeping the interface legible from across a table.'
     ],
-    caption: 'Placeholder visual for a lightweight retail add-on flow.'
-  },
-  {
-    title: 'Tiny Archive',
-    slug: 'tiny-archive',
-    description: 'A quiet index for saving loose references, notes, and unfinished ideas.',
-    year: '2022',
-    medium: 'Web sketch',
-    status: 'Shelf project',
-    size: 'medium',
-    accent: '#d0d0d0',
-    heroImageSrc: '/placeholders/hero-1.svg',
-    heroImageAlt: 'Large gray placeholder image.',
-    body: [
-      'Tiny Archive is a small idea for keeping unfinished references useful without turning them into a heavy knowledge system.',
-      'The sketch explores loose grouping, quick resurfacing, and a low-pressure way to keep fragments around until they become useful.'
-    ],
-    caption: 'Placeholder visual for a small reference archive.'
+    caption: 'The main game screen, with both scoreboards reset and the centre-ice mark in play.'
   }
 ];

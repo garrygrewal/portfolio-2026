@@ -1,0 +1,57 @@
+---
+import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
+import Figure from '../../components/Figure.astro';
+
+const metadata = [
+  { label: 'Platform', values: ['Air Hockey Table'] },
+  { label: 'Roles', values: ['Programmer'] }
+];
+---
+
+<CaseStudyLayout
+  title="Airduino Hockey"
+  description="An air hockey table powered by Arduino."
+  heroImageSrc="/images/explorations/airduino-hockey.webp"
+  heroImageAlt="Airduino Hockey game screen showing a rink, a centre-ice logo, and two player scoreboards set to zero."
+  metadata={metadata}
+>
+  <div class="content-block-text">
+    <p>Airduino Hockey is a two-player game built around physical controls: the scoreboard lives on screen, but the inputs come from an Arduino rig. We built an air hockey table and installed light strips within it, and the Arduino controls the lights as well.</p>
+  </div>
+
+  <div class="content-block-2col-top">
+    <div class="content-block-2col-left">
+      <Figure
+        videoSrc="/videos/explorations/airduino-hockey-1.mp4"
+        alt="Two players rallying the puck across the Airduino Hockey table."
+      />
+    </div>
+    <div class="content-block-2col-text-block">
+      <p>Just like any other air hockey table, but this one is rigged with lights that are controlled by Arduino. Any time a player hits the walls of the table or scores a goal, the lights go off.</p>
+    </div>
+  </div>
+
+  <div class="content-block-2col-top reverse">
+    <div class="content-block-2col-left">
+      <Figure
+        videoSrc="/videos/explorations/airduino-hockey-2.mp4"
+        alt="Close-up of the Airduino Hockey game during a fast rally."
+      />
+    </div>
+    <div class="content-block-2col-text-block">
+      <p>Sensor input is read cleanly and quickly enough that a fast rally, as air hockey games typically are, is still able to output properly.</p>
+    </div>
+  </div>
+
+  <div class="content-block-2col-top">
+    <div class="content-block-2col-left">
+      <Figure
+        videoSrc="/videos/explorations/airduino-hockey-3.mp4"
+        alt="A goal being scored in Airduino Hockey, with the scoreboard updating."
+      />
+    </div>
+    <div class="content-block-2col-text-block">
+      <p>The scoreboard updates in real time as goals are scored, keeping the focus on the physical experience rather than the screen.</p>
+    </div>
+  </div>
+</CaseStudyLayout>

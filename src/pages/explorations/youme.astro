@@ -1,0 +1,113 @@
+---
+import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
+import Figure from '../../components/Figure.astro';
+
+const metadata = [
+  { label: 'Platform', values: ['Mobile'] },
+  { label: 'Roles', values: ['Interaction Design', 'User Research'] }
+];
+---
+
+<CaseStudyLayout
+  title="YouMe"
+  description="An inclusive sexual education app for LGBTQ+ youth"
+  heroVideo={{ webm: '/videos/explorations/youme-home-banner.webm', mp4: '/videos/explorations/youme-home-banner.mp4' }}
+  heroImageAlt="Animated purple mascot character walking in front of a green chalkboard listing sex education topics."
+  metadata={metadata}
+>
+  <!-- Intro -->
+  <div class="content-block-text">
+    <p>YouMe is an inclusive sexual education app designed for LGBTQ+ youth. Over six weeks, in a team of five, we went from initial research to a fully interactive prototype. The project came about during pride month, when my team and I wanted to contribute something meaningful for the LGBTQ community.</p>
+  </div>
+
+  <div class="content-block-offset-right">
+    <Figure
+      src="/images/explorations/youme-affinity.jpg"
+      alt="An affinity map on a wall, grouping interview quotes and survey responses into clusters."
+      caption="Affinity map used to identify patterns across interview and survey data."
+    />
+  </div>
+
+  <!-- Problem & Research -->
+  <div class="content-block-text">
+    <p>Through surveys and interviews with students and teachers, we found that 68% of participants learned about sexual health and identity online rather than in school, and current Canadian curriculum lacks information tailored to LGBTQ+ youth. We set out to bridge that gap with a mobile app that offered a personal, private learning experience.</p>
+  </div>
+
+  <div class="content-block-offset-left natural-aspect">
+    <Figure
+      src="/images/explorations/youme-gamification.png"
+      alt="Gamification elements including streaks, coins, and daily rewards used to motivate continued learning."
+      caption="Gamification elements used as intrinsic motivation for continued learning."
+    />
+  </div>
+
+  <div class="content-block-text">
+    <p>We designed five core features, each reinforcing the others. The app uses gamification to keep learners engaged, rewarding progress with coins they can spend on customization. The tone was important: friendly enough for teenagers without undercutting the seriousness of the subject matter.</p>
+  </div>
+
+  <!-- Features - alternating 2col layout -->
+  <div class="content-block-2col-top">
+    <div class="content-block-2col-left small">
+      <Figure
+        videoSrc="/videos/explorations/youme-learn.mp4"
+        alt="Learn feature showing a user selecting a module and reading through a lesson on relationships."
+      />
+    </div>
+    <div class="content-block-2col-text-block">
+      <p><strong>Learn.</strong> Users choose from a variety of topics, from relationships to reproduction, and work through lessons at their own pace using articles and videos.</p>
+    </div>
+  </div>
+
+  <div class="content-block-2col-top reverse">
+    <div class="content-block-2col-left small">
+      <Figure
+        videoSrc="/videos/explorations/youme-apply.mp4"
+        alt="Apply feature showing a user answering quiz questions to reinforce what they learned."
+      />
+    </div>
+    <div class="content-block-2col-text-block">
+      <p><strong>Apply.</strong> Quick interactive quizzes let users test what they've learned and reinforce key concepts.</p>
+    </div>
+  </div>
+
+  <div class="content-block-2col-top">
+    <div class="content-block-2col-left small">
+      <Figure
+        videoSrc="/videos/explorations/youme-discover.mp4"
+        alt="Discover feature showing daily content cards with stories and advice."
+      />
+    </div>
+    <div class="content-block-2col-text-block">
+      <p><strong>Discover.</strong> Daily content surfaces stories and advice that users can apply in their own lives, encouraging them to come back regularly.</p>
+    </div>
+  </div>
+
+  <div class="content-block-2col-top reverse">
+    <div class="content-block-2col-left small">
+      <Figure
+        videoSrc="/videos/explorations/youme-play.mp4"
+        alt="Play feature showing a user unlocking and playing a mini-game."
+      />
+    </div>
+    <div class="content-block-2col-text-block">
+      <p><strong>Play.</strong> Completing lessons and quizzes unlocks mini-games that users can play solo or with friends.</p>
+    </div>
+  </div>
+
+  <div class="content-block-2col-top">
+    <div class="content-block-2col-left small">
+      <Figure
+        videoSrc="/videos/explorations/youme-customize.mp4"
+        alt="Customize feature showing a user spending earned coins to personalize their avatar and app theme."
+      />
+    </div>
+    <div class="content-block-2col-text-block">
+      <p><strong>Customize.</strong> Coins earned through progress can be spent on avatar and theme customization, giving learners ownership over their experience.</p>
+    </div>
+  </div>
+
+  <!-- Reflection -->
+  <div class="content-block-text">
+    <p>YouMe was a finalist at the 2019 Vancouver UX Awards. The project taught me how to design for a sensitive subject without losing accessibility, and how gamification can be more than a gimmick when it genuinely serves the learning goals.</p>
+  </div>
+</CaseStudyLayout>

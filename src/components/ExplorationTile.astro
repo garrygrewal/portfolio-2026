@@ -21,6 +21,13 @@ const href = `/explorations/${project.slug}`;
   style={`--tile-accent: ${project.accent};`}
 >
   <span class="exploration-tile-media" aria-hidden="true">
-    <img src={project.heroImageSrc} alt="" class="exploration-tile-image" loading={mode === 'scatter' ? 'eager' : 'lazy'} />
+    {project.heroVideo ? (
+      <video class="exploration-tile-image" autoplay muted loop playsinline preload={mode === 'scatter' ? 'auto' : 'metadata'}>
+        {project.heroVideo.webm && <source src={project.heroVideo.webm} type="video/webm" />}
+        {project.heroVideo.mp4 && <source src={project.heroVideo.mp4} type="video/mp4" />}
+      </video>
+    ) : project.heroImageSrc ? (
+      <img src={project.heroImageSrc} alt="" class="exploration-tile-image" loading={mode === 'scatter' ? 'eager' : 'lazy'} />
+    ) : null}
   </span>
 </a>

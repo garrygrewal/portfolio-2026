@@ -1,0 +1,111 @@
+---
+import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
+import Figure from '../../components/Figure.astro';
+
+const metadata = [
+  { label: 'Platform', values: ['Web'] },
+  { label: 'Roles', values: ['User Research', 'Interaction Design', 'Content Strategy'] }
+];
+---
+
+<CaseStudyLayout
+  title="Patagonia: Worn Wear"
+  description="A digital experience that surfaces Patagonia's second-hand Worn Wear program inside the main shopping flow."
+  heroVideo={{ mp4: '/videos/explorations/patagonia-home-banner.mp4' }}
+  heroImageAlt="Animated Patagonia Worn Wear concept showing second-hand gear presented alongside new products."
+  metadata={metadata}
+>
+  <!-- Intro -->
+  <div class="content-block-text">
+    <p>Patagonia: Worn Wear was a five-week team project for a senior experience-design course. Working in a team of five, we were asked to propose a digital experience that solved a real business problem for a client while staying true to their brand. We focused on Worn Wear, Patagonia's program for buying and selling second-hand gear. My work spanned user research, interaction design, and content strategy.</p>
+  </div>
+
+  <div class="content-block-embed">
+    <iframe
+      src="https://www.youtube.com/embed/d4Vu0dWTT4A"
+      title="Patagonia: Worn Wear project video"
+      loading="lazy"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    ></iframe>
+  </div>
+
+  <div class="content-block-offset-right">
+    <Figure
+      src="/images/explorations/patagonia-brand-pillar.png"
+      alt="Patagonia's Don't Buy This Jacket ad, running in a newspaper, urging customers to buy less."
+      caption="Caring for the earth is Patagonia's core brand pillar: buy less, buy better."
+    />
+  </div>
+
+  <!-- Problem -->
+  <div class="content-block-text">
+    <p>The business problem: Patagonia's price point puts its gear out of reach for many of the people who most share its environmental values. That works against the brand's mission of creating more environmentally conscious consumers, since the people most aligned with it often can't afford to buy in.</p>
+  </div>
+
+  <div class="content-block-offset-left natural-aspect">
+    <Figure
+      src="/images/explorations/patagonia-worn-wear.png"
+      alt="The existing Worn Wear website, a separate site from patagonia.com, showing pre-owned product listings."
+      caption="Worn Wear already offered lower-priced, second-hand gear, but it lived on a separate site."
+    />
+  </div>
+
+  <div class="content-block-text">
+    <p>We surveyed 200+ people to test the opportunity. Two findings stood out: quality and condition are the most important factors when shopping for outdoor gear, and 88% of respondents who had heard of Patagonia didn't know Worn Wear existed. The program that could lower the barrier to entry was effectively invisible.</p>
+  </div>
+
+  <div class="content-block-full">
+    <Figure
+      videoSrc="/videos/explorations/patagonia-current-discover.mp4"
+      alt="Screen recording of the current Patagonia site, where Worn Wear is only reachable by digging through a complex navigation menu."
+      caption="Today, discovering Worn Wear means digging through a complex nav menu."
+    />
+  </div>
+
+  <!-- Framing -->
+  <div class="content-block-text">
+    <p>So we reframed the goal: surface Worn Wear inside the main shopping experience instead of treating it as a separate destination, and give shoppers enough transparency to trust a second-hand purchase. That came down to three design moves.</p>
+  </div>
+
+  <div class="content-block-2col-top">
+    <div class="content-block-2col-left">
+      <Figure
+        videoSrc="/videos/explorations/patagonia-decision-onewebsite.mp4"
+        alt="Concept showing second-hand Worn Wear items appearing alongside new products in the main catalogue, at a lower price."
+      />
+    </div>
+    <div class="content-block-2col-text-block">
+      <p><strong>One website.</strong> Merging Worn Wear items into the main catalogue puts them on the same footing as new products, so shoppers can weigh price and value side by side.</p>
+    </div>
+  </div>
+
+  <div class="content-block-2col-top reverse">
+    <div class="content-block-2col-left">
+      <Figure
+        videoSrc="/videos/explorations/patagonia-decision-immerse.mp4"
+        alt="Concept detailing a garment's condition, highlighting where it was repaired or shows wear."
+      />
+    </div>
+    <div class="content-block-2col-text-block">
+      <p><strong>Immersive transparency.</strong> Condition drives the second-hand decision, so we surfaced exactly where a garment is worn or repaired, letting shoppers judge quality for themselves.</p>
+    </div>
+  </div>
+
+  <div class="content-block-2col-top">
+    <div class="content-block-2col-left">
+      <Figure
+        videoSrc="/videos/explorations/patagonia-decision-aftercare.mp4"
+        alt="Post-purchase customer portal offering aftercare guidance and a trade-in option."
+      />
+    </div>
+    <div class="content-block-2col-text-block">
+      <p><strong>Aftercare &amp; longevity.</strong> After the sale, customers get the resources to keep their gear in good shape, or trade it back in for store credit and keep it in the cycle.</p>
+    </div>
+  </div>
+
+  <!-- Reflection -->
+  <div class="content-block-text">
+    <p>This was one of the first times I saw business and design working in tandem, using experience design to solve a real business problem while staying inside a brand's values. The project was well received in class, and it helped shape how I think about design today.</p>
+  </div>
+</CaseStudyLayout>
