@@ -727,6 +727,10 @@ body:has(.explorations-page) .footer {
   aspect-ratio: 1 / 1;
 }
 
+.exploration-tile--portrait .exploration-tile-media {
+  aspect-ratio: 3 / 4;
+}
+
 .exploration-tile-image {
   display: block;
   height: 100%;
@@ -763,10 +767,18 @@ body:has(.explorations-page) .footer {
   width: 250px;
 }
 
-.exploration-tile--scatter:hover,
-.exploration-tile--scatter:focus-visible {
+.exploration-tile--scatter.exploration-tile--portrait {
+  width: 300px;
+}
+
+.exploration-tile--scatter:not(.exploration-tile--static):hover,
+.exploration-tile--scatter:not(.exploration-tile--static):focus-visible {
   --tile-hover-scale: 1.05;
   z-index: 3;
+}
+
+.exploration-tile--static {
+  cursor: default;
 }
 
 @keyframes explorations-title-opacity {
