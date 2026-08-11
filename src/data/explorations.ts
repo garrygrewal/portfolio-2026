@@ -29,6 +29,17 @@ export const explorationProjects: ExplorationProject[] = [
     heroImageAlt: 'Painted concept sketch of the candy dispenser shown from the front, side, and three-quarter angles.'
   },
   {
+    title: 'Patagonia: Worn Wear',
+    slug: 'patagonia-worn-wear',
+    description: 'A digital experience that surfaces Patagonia\'s second-hand Worn Wear program inside the main shopping flow.',
+    platform: 'Web',
+    roles: 'Research, Interaction, Content',
+    size: 'wide',
+    accent: '#c9a227',
+    heroVideo: { mp4: '/videos/explorations/patagonia-home-banner.mp4' },
+    heroImageAlt: 'Animated Patagonia Worn Wear concept showing second-hand gear presented alongside new products.'
+  },
+  {
     title: 'Alvar Aalto Week',
     slug: 'alvar-aalto-week',
     description: 'Poster design for the Alvar Aalto Week 2021.',
@@ -39,17 +50,6 @@ export const explorationProjects: ExplorationProject[] = [
     heroImageSrc: '/images/explorations/alvar-aalto-week.webp',
     heroImageAlt: 'Red and white typographic poster for Alvar Aalto Week 2021 in Kouvola, Finland, with halftone architectural imagery.',
     static: true
-  },
-  {
-    title: 'Patagonia: Worn Wear',
-    slug: 'patagonia-worn-wear',
-    description: 'A digital experience that surfaces Patagonia\'s second-hand Worn Wear program inside the main shopping flow.',
-    platform: 'Web',
-    roles: 'Research, Interaction, Content',
-    size: 'wide',
-    accent: '#c9a227',
-    heroVideo: { mp4: '/videos/explorations/patagonia-home-banner.mp4' },
-    heroImageAlt: 'Animated Patagonia Worn Wear concept showing second-hand gear presented alongside new products.'
   },
   {
     title: 'YouMe',
