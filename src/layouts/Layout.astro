@@ -65,6 +65,7 @@ const { title = 'Garry Grewal' } = Astro.props;
         el.style.setProperty('--reveal-delay', `${Math.min(i * 40, 240)}ms`);
       });
     }
+    const homeGrid = document.querySelector('.project-grid');
     const elements = Array.from(document.querySelectorAll('.reveal'));
 
     if (elements.length === 0) {
@@ -72,6 +73,10 @@ const { title = 'Garry Grewal' } = Astro.props;
     } else if (prefersReduced || !('IntersectionObserver' in window)) {
       for (const el of elements) el.classList.add('is-visible');
     } else {
+      const observerOptions = homeGrid
+        ? { threshold: 0, rootMargin: '0px 0px 10% 0px' }
+        : { threshold: 0.12, rootMargin: '0px 0px -10% 0px' };
+
       const observer = new IntersectionObserver(
         (entries) => {
           for (const entry of entries) {
@@ -80,7 +85,7 @@ const { title = 'Garry Grewal' } = Astro.props;
             observer.unobserve(entry.target); // reveal once
           }
         },
-        { threshold: 0.12, rootMargin: '0px 0px -10% 0px' }
+        observerOptions
       );
 
       for (const el of elements) observer.observe(el);

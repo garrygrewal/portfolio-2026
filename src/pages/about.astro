@@ -13,9 +13,9 @@ import Layout from '../layouts/Layout.astro';
     </div>
     <!-- Right column: Bio -->
     <div class="about-bio">
-      <p>I'm a Product Designer born and raised in Vancouver who loves turning complex problems into well-crafted experiences.</p>
-      <p>I've worked across SaaS and consumer products in industries like boutique fitness, parks & recreation, fintech, and e-commerce, often on products with very different users and goals.</p>
-      <p>Feel free to reach out if you have any questions or just want to chat about design.</p>
+      <p>Currently designing products for the fitness and wellbeing world at <a href="https://www.marianatek.com/" class="link-underline" target="_blank" rel="noopener noreferrer">Mariana Tek</a>.</p>
+      <p>I’m a Product Designer born and raised in Vancouver who loves turning complex problems into thoughtful, well-crafted experiences. I’ve worked across SaaS and consumer products in industries including boutique fitness, parks & recreation, fintech, and e-commerce.</p>
+      <p>Feel free to reach out if you have any questions, want to talk design, or just want to say hello.</p>
     </div>
   </div>
 
@@ -47,10 +47,28 @@ import Layout from '../layouts/Layout.astro';
       var imgIndex = 0;
       var lastX = 0;
       var lastY = 0;
+      var linkBuffer = 50;
+
+      function isNearProtectedLink(x, y) {
+        var links = document.querySelectorAll('.about-links');
+        for (var i = 0; i < links.length; i++) {
+          var rect = links[i].getBoundingClientRect();
+          if (
+            x >= rect.left - linkBuffer &&
+            x <= rect.right + linkBuffer &&
+            y >= rect.top - linkBuffer &&
+            y <= rect.bottom + linkBuffer
+          ) {
+            return true;
+          }
+        }
+        return false;
+      }
 
       document.addEventListener('mousemove', function(e) {
         var target = e.target;
         if (target && target.closest && (target.closest('a') || target.closest('.about-links'))) return;
+        if (isNearProtectedLink(e.clientX, e.clientY)) return;
 
         var dx = e.clientX - lastX;
         var dy = e.clientY - lastY;
