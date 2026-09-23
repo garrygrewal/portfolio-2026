@@ -31,7 +31,7 @@ const tileAttrs = {
   </div>
 ) : (
   <a href={href} {...tileAttrs}>
-    <span class="exploration-tile-media" aria-hidden="true">
+    <span class="exploration-tile-media" aria-hidden="true" data-project-media={project.slug}>
       {project.heroVideo ? (
         <video class="exploration-tile-image" autoplay muted loop playsinline preload={mode === 'scatter' ? 'auto' : 'metadata'}>
           {project.heroVideo.webm && <source src={project.heroVideo.webm} type="video/webm" />}

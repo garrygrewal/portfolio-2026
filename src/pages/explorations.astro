@@ -5,6 +5,7 @@ import { explorationProjects } from '../data/explorations';
 ---
 
 <Layout title="Explorations - Garry Grewal">
+  <link slot="head" rel="expect" href="#explorations-ready" blocking="render" />
   <div class="explorations-page">
     <ExplorationsHero projects={explorationProjects} />
   </div>

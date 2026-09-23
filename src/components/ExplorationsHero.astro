@@ -254,6 +254,7 @@ const { projects } = Astro.props;
     });
 
     var startTiles = function() {
+      if (introComplete) return;
       introComplete = true;
       hero.classList.add('is-intro-complete');
       applyPosition(currentPosition);
@@ -269,10 +270,63 @@ const { projects } = Astro.props;
       }
     };
 
-    if (reducedMotion.matches) {
+    var saveState = function() {
+      try {
+        sessionStorage.setItem('explorations-state', JSON.stringify({
+          count: tileOrder.length,
+          position: Math.round(targetPosition),
+          tiles: tileOrder.map(function(tile) {
+            return {
+              left: tile.style.left,
+              top: tile.style.top,
+              scale: tile.style.getPropertyValue('--tile-scale')
+            };
+          })
+        }));
+      } catch (err) {}
+    };
+
+    var restored = false;
+    var restoreState = function() {
+      if (restored || introComplete) return restored;
+      if (!document.documentElement.classList.contains('project-transition')) return false;
+
+      var saved = null;
+      try {
+        saved = JSON.parse(sessionStorage.getItem('explorations-state') || 'null');
+      } catch (err) {}
+      if (!saved || saved.count !== tileOrder.length) return false;
+
+      restored = true;
+      hero.classList.add('is-returning');
+      tileOrder.forEach(function(tile, index) {
+        var state = saved.tiles[index];
+        tile.style.left = state.left;
+        tile.style.top = state.top;
+        tile.style.setProperty('--tile-scale', state.scale || '1');
+        tile.style.setProperty('--tile-base-opacity', '1');
+      });
+      currentMode = window.innerWidth < 768;
+      currentPosition = clamp(saved.position || 0, 0, maxStart);
+      targetPosition = currentPosition;
       startTiles();
-    } else {
-      window.setTimeout(startTiles, 2000);
+
+      window.setTimeout(function() {
+        hero.classList.remove('is-returning');
+      }, 1200);
+      return true;
+    };
+
+    window.addEventListener('project-transition-out', saveState);
+    window.addEventListener('pagehide', saveState);
+    window.addEventListener('pagereveal', restoreState);
+
+    if (!restoreState()) {
+      if (reducedMotion.matches) {
+        startTiles();
+      } else {
+        window.setTimeout(startTiles, 2000);
+      }
     }
 
     hero.addEventListener('wheel', handleWheel, { passive: false });
@@ -305,3 +359,4 @@ const { projects } = Astro.props;
     }
   })();
 </script>
+<span id="explorations-ready" hidden></span>

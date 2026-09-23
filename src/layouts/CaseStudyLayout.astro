@@ -19,14 +19,19 @@ interface Props {
   heroImageSrc?: string;
   heroImageAlt: string;
   heroVideo?: { webm?: string; mp4?: string };
+  heroPoster?: string;
+  projectMedia?: string;
   metadata: MetadataItem[];
   metrics?: Metric[];
 }
 
-const { title, description, heroImageSrc, heroImageAlt, heroVideo, metadata, metrics } = Astro.props;
+const { title, description, heroImageSrc, heroImageAlt, heroVideo, heroPoster, projectMedia, metadata, metrics } = Astro.props;
 ---
 
 <Layout title={`${title} - Garry Grewal`}>
+  <link slot="head" rel="expect" href="#project-hero" blocking="render" />
+  {heroImageSrc && <link slot="head" rel="preload" as="image" href={heroImageSrc} />}
+  {heroPoster && <link slot="head" rel="preload" as="image" href={heroPoster} />}
   <!-- Title and Metadata Section -->
   <div class="case-study-intro">
     <h1 class="case-study-title">{title}</h1>
@@ -48,14 +53,30 @@ const { title, description, heroImageSrc, heroImageAlt, heroVideo, metadata, met
   </div>
 
   <!-- Hero Image or Video -->
-  <div class="case-study-hero">
+  <div class="case-study-hero" id="project-hero">
     {heroVideo ? (
-      <video class="case-study-hero-image" autoplay muted loop playsinline aria-label={heroImageAlt}>
+      <video
+        class="case-study-hero-image"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        poster={heroPoster}
+        aria-label={heroImageAlt}
+        data-project-media={projectMedia}
+      >
         {heroVideo.webm && <source src={heroVideo.webm} type="video/webm" />}
         {heroVideo.mp4 && <source src={heroVideo.mp4} type="video/mp4" />}
       </video>
     ) : heroImageSrc ? (
-      <img src={heroImageSrc} alt={heroImageAlt} class="case-study-hero-image" />
+      <img
+        src={heroImageSrc}
+        alt={heroImageAlt}
+        class="case-study-hero-image"
+        data-project-media={projectMedia}
+        fetchpriority="high"
+      />
     ) : null}
   </div>
 

@@ -16,7 +16,130 @@ const { title = 'Garry Grewal' } = Astro.props;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>
+      (function () {
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        window.__herePath = location.pathname.length > 1 ? location.pathname.replace(/\/$/, '') : location.pathname;
+
+        var returnScroll = null;
+        var pinScroll = false;
+        try {
+          if (location.pathname === '/') {
+            var raw = sessionStorage.getItem('home-scroll');
+            if (raw != null && raw !== '') returnScroll = Number(raw);
+          }
+          if (sessionStorage.getItem('project-transition') === window.__herePath) {
+            document.documentElement.classList.add('project-transition');
+          }
+          sessionStorage.removeItem('project-transition');
+        } catch (err) {}
+
+        pinScroll = location.pathname === '/' && returnScroll != null && isFinite(returnScroll);
+        window.__pinHomeScroll = pinScroll;
+        window.__returnScroll = returnScroll;
+
+        var applyingScroll = false;
+        var applyHomeScroll = function () {
+          if (applyingScroll || !pinScroll || location.pathname !== '/') return;
+          var root = document.scrollingElement || document.documentElement;
+          if (Math.abs(root.scrollTop - returnScroll) < 1) return;
+          applyingScroll = true;
+          root.scrollTop = returnScroll;
+          applyingScroll = false;
+        };
+
+        window.__applyHomeScroll = applyHomeScroll;
+
+        var saveHomeScroll = function (y) {
+          window.__returnScroll = y;
+          try {
+            sessionStorage.setItem('home-scroll', String(y));
+          } catch (err) {}
+        };
+
+        var releasePin = function () {
+          pinScroll = false;
+          window.__pinHomeScroll = false;
+        };
+
+        window.addEventListener('wheel', releasePin, { passive: true });
+        window.addEventListener('touchmove', releasePin, { passive: true });
+        window.addEventListener('keydown', function (event) {
+          if (event.key === 'ArrowDown' || event.key === 'ArrowUp' || event.key === 'PageDown' || event.key === 'PageUp' || event.key === 'Home' || event.key === 'End' || event.key === ' ') {
+            releasePin();
+          }
+        });
+        window.addEventListener('pointerdown', releasePin);
+
+        window.addEventListener('pagehide', function () {
+          if (location.pathname !== '/') return;
+          var y = pinScroll && returnScroll != null ? returnScroll : (window.scrollY || document.documentElement.scrollTop || 0);
+          saveHomeScroll(y);
+        });
+
+        window.addEventListener('scroll', function () {
+          if (location.pathname !== '/') return;
+          if (pinScroll) {
+            applyHomeScroll();
+            return;
+          }
+          saveHomeScroll(window.scrollY || document.documentElement.scrollTop || 0);
+        }, { passive: true });
+
+        if (document.fonts && document.fonts.ready) {
+          document.fonts.ready.then(applyHomeScroll);
+        }
+        window.addEventListener('load', applyHomeScroll);
+
+        window.addEventListener('pagereveal', function (event) {
+          if (location.pathname === '/') {
+            try {
+              if (sessionStorage.getItem('project-transition') === window.__herePath) {
+                document.documentElement.classList.add('project-transition');
+              }
+            } catch (err) {}
+            applyHomeScroll();
+          }
+
+          if (!event.viewTransition) return;
+
+          var clearNames = function () {
+            document.querySelectorAll('[data-project-media]').forEach(function (node) {
+              node.style.viewTransitionName = '';
+            });
+            document.querySelectorAll('.tile').forEach(function (tile) {
+              tile.style.transition = '';
+              tile.style.transform = '';
+              tile.style.willChange = '';
+              tile.style.opacity = '';
+            });
+          };
+          clearNames();
+
+          try {
+            sessionStorage.removeItem('project-transition');
+            var key = sessionStorage.getItem('project-transition-media');
+            sessionStorage.removeItem('project-transition-media');
+            if (key) {
+              var el = document.querySelector('[data-project-media="' + key + '"]');
+              if (el) el.style.viewTransitionName = 'project-active';
+            }
+          } catch (err) {}
+
+          applyHomeScroll();
+          event.viewTransition.finished.then(function () {
+            clearNames();
+            applyHomeScroll();
+          }, clearNames);
+        });
+
+        window.addEventListener('pageshow', function () {
+          applyHomeScroll();
+        });
+      })();
+    </script>
     <title>{title}</title>
+    <slot name="head" />
     <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
     
     <!-- Fonts -->
@@ -31,7 +154,96 @@ const { title = 'Garry Grewal' } = Astro.props;
     </main>
     <Footer />
     <SpeedInsights />
+    <script is:inline>
+      if (window.__applyHomeScroll) window.__applyHomeScroll();
+    </script>
     <script type="module">
+    const projectMediaByPath = {
+      '/mariana-tek-appointments': 'appointments',
+      '/mariana-tek-year-in-motion': 'year-in-motion',
+      '/xplor-rec-mobile': 'xplor-rec',
+      '/q4-capital-connect': 'q4'
+    };
+
+    const pathnameOf = (url) => {
+      try {
+        const path = new URL(url, location.origin).pathname;
+        return path.length > 1 ? path.replace(/\/$/, '') : path;
+      } catch (err) {
+        return '';
+      }
+    };
+
+    const explorationSlug = (path) => {
+      const match = /^\/explorations\/([^/]+)$/.exec(path);
+      return match ? match[1] : null;
+    };
+
+    const projectMediaFor = (from, to) => {
+      if (from === '/' && projectMediaByPath[to]) return projectMediaByPath[to];
+      if (to === '/' && projectMediaByPath[from]) return projectMediaByPath[from];
+      if (from === '/explorations' && explorationSlug(to)) return explorationSlug(to);
+      if (to === '/explorations' && explorationSlug(from)) return explorationSlug(from);
+      return null;
+    };
+
+    window.addEventListener('pageswap', (event) => {
+      if (location.pathname === '/') {
+        try {
+          const y = window.__pinHomeScroll && typeof window.__returnScroll === 'number'
+            ? window.__returnScroll
+            : (window.scrollY || document.documentElement.scrollTop || 0);
+          sessionStorage.setItem('home-scroll', String(y));
+        } catch (err) {}
+      }
+
+      if (!event.viewTransition) return;
+
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const from = pathnameOf(event.activation && event.activation.from && event.activation.from.url);
+      const to = pathnameOf(event.activation && event.activation.entry && event.activation.entry.url);
+      const mediaKey = projectMediaFor(from, to);
+
+      if (reduced || !mediaKey) {
+        event.viewTransition.skipTransition();
+        return;
+      }
+
+      document.querySelectorAll('.tile').forEach((tile) => {
+        tile.style.transition = 'none';
+        tile.style.transform = 'none';
+        tile.style.willChange = 'auto';
+        tile.style.opacity = '1';
+      });
+
+      document.querySelectorAll('[data-project-media]').forEach((node) => {
+        node.style.viewTransitionName = '';
+      });
+
+      const outgoing = document.querySelector('[data-project-media="' + mediaKey + '"]');
+      if (outgoing) {
+        void outgoing.offsetWidth;
+        outgoing.style.viewTransitionName = 'project-active';
+      }
+
+      window.dispatchEvent(new CustomEvent('project-transition-out'));
+
+      try {
+        sessionStorage.setItem('project-transition', to);
+        sessionStorage.setItem('project-transition-media', mediaKey);
+      } catch (err) {}
+    });
+
+    window.addEventListener('pagereveal', (event) => {
+      if (!event.viewTransition) return;
+      try {
+        if (sessionStorage.getItem('project-transition') === window.__herePath) {
+          document.documentElement.classList.add('project-transition');
+        }
+        sessionStorage.removeItem('project-transition');
+      } catch (err) {}
+    });
+
     const setHeaderCenterWidth = () => {
     const nav = document.querySelector('.header-nav');
     if (!nav) return;

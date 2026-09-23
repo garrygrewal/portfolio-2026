@@ -3,12 +3,15 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="Garry Grewal">
-
+  <link slot="head" rel="expect" href="#project-grid-end" blocking="render" />
+  <link slot="head" rel="preload" as="image" href="/images/yearinmotion_hero.webp" />
+  <link slot="head" rel="preload" as="image" href="/images/mtappointments-poster.webp" />
+  <link slot="head" rel="preload" as="image" href="/images/q4-poster.webp" />
 
   <div class="project-grid">
     <!-- Wide tile at top -->
     <a href="/mariana-tek-appointments" class="tile tile-1 reveal">
-      <div class="tile-media">
+      <div class="tile-media" data-project-media="appointments">
         <video class="tile-image" autoplay muted loop playsinline aria-label="Mariana Tek Appointments preview">
           <source src="/videos/mtappointments_tile.webm" type="video/webm" />
           <source src="/videos/mtappointments_tile.mp4" type="video/mp4" />
@@ -22,7 +25,7 @@ import Layout from '../layouts/Layout.astro';
 
     <!-- Tall tile left -->
     <a href="/mariana-tek-year-in-motion" class="tile tile-2 reveal">
-      <div class="tile-media">
+      <div class="tile-media" data-project-media="year-in-motion">
         <video class="tile-image" autoplay muted loop playsinline aria-label="Mariana Tek Year In Motion preview">
           <source src="/videos/yearinmotion_tile.webm" type="video/webm" />
           <source src="/videos/yearinmotion_tile.mp4" type="video/mp4" />
@@ -36,7 +39,7 @@ import Layout from '../layouts/Layout.astro';
 
     <!-- Square tile right -->
     <a href="/xplor-rec-mobile" class="tile tile-3 reveal">
-      <div class="tile-media">
+      <div class="tile-media" data-project-media="xplor-rec">
         <img src="/images/rec-banner.webp" alt="Variations of the Xplor Rec mobile app for different municipalities" class="tile-image" />
       </div>
       <div class="tile-text">
@@ -47,7 +50,7 @@ import Layout from '../layouts/Layout.astro';
 
     <!-- Wide tile near bottom -->
     <a href="/q4-capital-connect" class="tile tile-4 reveal">
-      <div class="tile-media">
+      <div class="tile-media" data-project-media="q4">
         <video class="tile-image" autoplay muted loop playsinline aria-label="Q4 Inc. preview">
           <source src="/videos/q4-banner.webm" type="video/webm" />
         </video>
@@ -58,4 +61,5 @@ import Layout from '../layouts/Layout.astro';
       </div>
     </a>
   </div>
+  <span id="project-grid-end" hidden></span>
 </Layout>
