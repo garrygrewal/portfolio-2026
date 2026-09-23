@@ -40,18 +40,6 @@ export const explorationProjects: ExplorationProject[] = [
     heroImageAlt: 'Animated Patagonia Worn Wear concept showing second-hand gear presented alongside new products.'
   },
   {
-    title: 'Alvar Aalto Week',
-    slug: 'alvar-aalto-week',
-    description: 'Poster design for the Alvar Aalto Week 2021.',
-    platform: 'Print',
-    roles: 'Graphic Design',
-    size: 'portrait',
-    accent: '#e42320',
-    heroImageSrc: '/images/explorations/alvar-aalto-week.webp',
-    heroImageAlt: 'Red and white typographic poster for Alvar Aalto Week 2021 in Kouvola, Finland, with halftone architectural imagery.',
-    static: true
-  },
-  {
     title: 'YouMe',
     slug: 'youme',
     description: 'An inclusive sexual education app for LGBTQ+ youth',
@@ -61,18 +49,6 @@ export const explorationProjects: ExplorationProject[] = [
     accent: '#b49af2',
     heroVideo: { webm: '/videos/explorations/youme-home-banner.webm', mp4: '/videos/explorations/youme-home-banner.mp4' },
     heroImageAlt: 'Animated purple mascot character walking in front of a green chalkboard listing sex education topics.'
-  },
-  {
-    title: 'Senses & Sensors',
-    slug: 'senses-sensors',
-    description: 'Poster design for the STRP Biënnale 2017.',
-    platform: 'Print',
-    roles: 'Graphic Design',
-    size: 'portrait',
-    accent: '#a8b527',
-    heroImageSrc: '/images/explorations/senses-sensors.webp',
-    heroImageAlt: 'Colorful pixel-art poster for the STRP Biënnale 2017 Senses and Sensors exhibition in Eindhoven.',
-    static: true
   },
   {
     title: 'Airduino Hockey',
@@ -89,17 +65,5 @@ export const explorationProjects: ExplorationProject[] = [
       'Most of the work went into the feel of the thing: reading sensor input cleanly enough that a fast rally still feels fair, and keeping the interface legible from across a table.'
     ],
     caption: 'The main game screen, with both scoreboards reset and the centre-ice mark in play.'
-  },
-  {
-    title: 'STRP Festival 2019',
-    slug: 'strp-festival-2019',
-    description: 'Poster design for the STRP Festival 2019.',
-    platform: 'Print',
-    roles: 'Graphic Design',
-    size: 'portrait',
-    accent: '#47b89d',
-    heroImageSrc: '/images/explorations/strp-festival-2019.webp',
-    heroImageAlt: 'Teal and purple poster for STRP Festival 2019 with isometric 3D typography and scanline texture.',
-    static: true
   }
 ];
