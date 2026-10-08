@@ -7,6 +7,7 @@ import Layout from '../layouts/Layout.astro';
   <link slot="head" rel="preload" as="image" href="/images/yearinmotion_hero.webp" />
   <link slot="head" rel="preload" as="image" href="/images/mtappointments-poster.webp" />
   <link slot="head" rel="preload" as="image" href="/images/q4-poster.webp" />
+  <link slot="head" rel="preload" as="image" href="/images/recmobile-poster.webp" />
 
   <div class="project-grid">
     <!-- Wide tile at top -->
@@ -40,7 +41,10 @@ import Layout from '../layouts/Layout.astro';
     <!-- Square tile right -->
     <a href="/xplor-rec-mobile" class="tile tile-3 reveal">
       <div class="tile-media" data-project-media="xplor-rec">
-        <img src="/images/rec-banner.webp" alt="Variations of the Xplor Rec mobile app for different municipalities" class="tile-image" />
+        <video class="tile-image" autoplay muted loop playsinline poster="/images/recmobile-poster.webp" aria-label="Xplor Recreation Mobile App preview">
+          <source src="/videos/recmobile_tile.webm" type="video/webm" />
+          <source src="/videos/recmobile_tile.mp4" type="video/mp4" />
+        </video>
       </div>
       <div class="tile-text">
         <span class="tile-label">Xplor Recreation Mobile App</span>
