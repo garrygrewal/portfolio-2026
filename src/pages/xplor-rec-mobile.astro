@@ -3,8 +3,8 @@ import CaseStudyLayout from '../layouts/CaseStudyLayout.astro';
 import Figure from '../components/Figure.astro';
 
 const metadata = [
-  { label: 'Platform', values: ['Mobile'] },
-  { label: 'Roles', values: ['Product Design', 'UX Research'] }
+  { label: 'Platform', values: ['Mobile (iOS & Android)'] },
+  { label: 'Roles', values: ['Sole Product Designer', 'UX Research', 'Design System', 'Prototyping'] }
 ];
 
 const metrics = [
@@ -17,7 +17,8 @@ const metrics = [
 <CaseStudyLayout
   title="Xplor Rec Mobile App"
   description="The first white-label native mobile app in the parks & recreation industry."
-  heroImageSrc="/images/rec-banner.webp"
+  heroVideo={{ webm: "/videos/recmobile_tile.webm", mp4: "/videos/recmobile_tile.mp4" }}
+  heroPoster="/images/recmobile-poster.webp"
   heroImageAlt="Xplor Recreation Mobile App"
   projectMedia="xplor-rec"
   metadata={metadata}
@@ -33,8 +34,8 @@ const metrics = [
   <div class="content-block-offset-left">
     <Figure
       src="/images/rec-ios-android.webp"
-      alt="Full width image"
-      caption="Designed natively for both iOS and Android to create a more intuitive mobile experience."
+      alt="Rec Mobile home screen shown side by side in light mode and dark mode"
+      caption="Full support for light and dark mode, following each member's system appearance settings."
     />
   </div>
 
@@ -47,7 +48,7 @@ const metrics = [
   <div class="content-block-full">
     <Figure
       src="/images/rec-mobile-4.webp"
-      alt="Right offset image"
+      alt="Four Rec Mobile screens: home, browse, cart, and favorites"
       caption="Core flows were designed to make program discovery and registration feel simple and connected."
     />
   </div>
@@ -58,10 +59,12 @@ const metrics = [
   </div>
 
   <!-- Offset left image -->
-  <div class="content-block-offset-left">
+  <div class="content-block-offset-left natural-aspect">
     <Figure
-      src="/images/rec-accesibility.webp"
-      alt="Full width image"
+      videoSrc="/videos/recmobile_dynamictype.webm"
+      videoFallbackSrc="/videos/recmobile_dynamictype.mp4"
+      poster="/images/recmobile-dynamictype-poster.webp"
+      alt="Increasing the iOS Text Size setting makes the Rec Mobile attendee sheet reflow to larger text"
       caption="A native-first approach allowed the app to support built-in device accessibility settings like Dynamic Type."
     />
   </div>
@@ -74,8 +77,10 @@ const metrics = [
   <!-- Full width image -->
   <div class="content-block-full">
     <Figure
-      src="/images/rec-mobile-branding-1.webp"
-      alt="Large content image"
+      videoSrc="/videos/recmobile_whitelabel.webm"
+      videoFallbackSrc="/videos/recmobile_whitelabel.mp4"
+      poster="/images/recmobile-whitelabel-poster.webp"
+      alt="The Rec Mobile app themed for Santa Barbara, Renton, Brampton and Rochester"
       caption="A flexible white-label design system allowed the app to scale across different cities and recreation brands."
     />
   </div>
@@ -83,8 +88,10 @@ const metrics = [
   <!-- Offset right image -->
   <div class="content-block-offset-right aspect-square">
     <Figure
-      src="/images/rec-ai.webp"
-      alt="Full width image"
+      videoSrc="/videos/recmobile_aisearch.webm"
+      videoFallbackSrc="/videos/recmobile_aisearch.mp4"
+      poster="/images/recmobile-aisearch-poster.webp"
+      alt="Rec Mobile conversational search on an iPhone: tapping Browse search brings up the keyboard and AI prompt suggestions, the query “Yoga for beginners in afternoon” is entered, and matching afternoon yoga classes appear"
       caption="Conversational search made it easier for members to find relevant programs using natural language."
     />
   </div>
@@ -92,8 +99,10 @@ const metrics = [
     <!-- Offset left image -->
   <div class="content-block-offset-left">
     <Figure
-      src="/images/rec-notifications.webp"
-      alt="Full width image"
+      videoSrc="/videos/recmobile_notifications.webm"
+      videoFallbackSrc="/videos/recmobile_notifications.mp4"
+      poster="/images/recmobile-notifications-poster.webp"
+      alt="Rec Mobile push notifications arriving one by one on an iPhone lock screen: waitlist confirmation, activity starting soon, and recreation center nearby"
       caption="Push notifications helped keep members informed about bookings, reminders, and important updates."
     />
   </div>
@@ -101,8 +110,10 @@ const metrics = [
   <!-- Offset right image -->
   <div class="content-block-offset-right aspect-square">
     <Figure
-      src="/images/rec-wishlist.webp"
-      alt="Full width image"
+      videoSrc="/videos/recmobile_imessage.webm"
+      videoFallbackSrc="/videos/recmobile_imessage.mp4"
+      poster="/images/recmobile-imessage-poster.webp"
+      alt="An iMessage conversation on an iPhone: a parent asks Kristen whether she has signed Sofia up for any summer classes, Kristen types back that they're thinking of signing up for these, and shares a link to her Rec Mobile wishlist"
       caption="The experience extended beyond the core app with the ability to coordinate program registration."
     />
   </div>

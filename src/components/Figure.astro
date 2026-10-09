@@ -4,15 +4,18 @@ interface Props {
   alt: string;
   caption?: string;
   videoSrc?: string;
+  videoFallbackSrc?: string;
+  poster?: string;
 }
 
-const { src, alt, caption, videoSrc } = Astro.props;
+const { src, alt, caption, videoSrc, videoFallbackSrc, poster } = Astro.props;
 ---
 
 <figure class="figure">
   {videoSrc ? (
-    <video class="figure-image" autoplay muted loop playsinline aria-label={alt}>
+    <video class="figure-image" autoplay muted loop playsinline poster={poster} aria-label={alt}>
       <source src={videoSrc} type={videoSrc.endsWith('.mp4') ? 'video/mp4' : 'video/webm'} />
+      {videoFallbackSrc && <source src={videoFallbackSrc} type={videoFallbackSrc.endsWith('.mp4') ? 'video/mp4' : 'video/webm'} />}
     </video>
   ) : src ? (
     <img src={src} alt={alt} class="figure-image" />
