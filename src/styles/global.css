@@ -1599,11 +1599,17 @@ html.project-transition .explorations-copy {
   }
   
   html.project-transition .case-study-hero.reveal,
-  html.project-transition .case-study-intro.reveal,
-  html.project-transition .tile.reveal {
+  html.project-transition .case-study-intro.reveal {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  /* Skip the reveal fade on return, but keep the hover scale smooth. */
+  html.project-transition .tile.reveal {
+    opacity: 1;
+    transform: none;
+    transition: transform 0.4s ease;
   }
 
   @media (prefers-reduced-motion: reduce) {
