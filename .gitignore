@@ -26,3 +26,4 @@ pnpm-debug.log*
 
 # claude local settings
 .claude/settings.local.json
+.type-trial/

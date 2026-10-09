@@ -480,54 +480,32 @@ main {
   font-family: var(--font-body);
   font-size: 32px;
   font-weight: 600;
-  letter-spacing: -0.02em;
-  line-height: 120%;
+  letter-spacing: -0.03em;
+  word-spacing: 0.06em; /* restore space width lost to the tight tracking */
+  line-height: 1.1;
   color: var(--color-text);
   text-align: left;
-  padding: 0 0 var(--space-8);
+  padding: 0 0 var(--space-4);
 }
 
+/* Same type as the case study text blocks, in grey */
 .tile-description {
   display: block;
   width: 100%;
   margin: 0;
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
-  line-height: 120%;
-  color: var(--color-text);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--color-muted);
   text-align: left;
   padding: 0;
-  box-sizing: border-box;
 }
 
 /* Video in tiles (e.g. tile-2) — same as image */
 .tile video.tile-image {
   pointer-events: none;
-}
-
-.tile-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: var(--space-16);
-  padding-top: var(--space-8);
-}
-
-.tile-title {
-  font-family: var(--font-body);
-  font-size: 24px;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 120%;
-  color: var(--color-text);
-}
-
-.tile-subtext {
-  font-family: var(--font-body);
-  font-size: 24px;
-  color: var(--color-muted);
-  white-space: nowrap;
 }
 
 /* ==========================================================================
@@ -1072,20 +1050,19 @@ html.project-transition .explorations-copy {
 
 @media (min-width: 768px) {
   .about-grid {
-    grid-template-columns: 1fr var(--header-center-width, auto) 1fr;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
     column-gap: var(--space-24);
     row-gap: var(--space-64);
     align-items: baseline;
   }
 
   .about-links {
-    grid-column: 1;
+    grid-column: 1 / 7;
   }
 
   .about-bio {
-    grid-column: 2 / -1; /* starts where the nav column starts */
+    grid-column: 7 / -1; /* right half of the 12-column grid */
     min-width: 0;
-    max-width: 70ch;
   }
 }
 
@@ -1110,19 +1087,16 @@ html.project-transition .explorations-copy {
   text-decoration-color: var(--color-link);
 }
 
-.about-bio {
-  max-width: 70ch;
-}
-
 .about-bio p {
+  max-width: 36ch;
   font-size: 24px;
-  font-weight: 400;
-  line-height: 120%;
+  font-weight: 500;
+  line-height: 1.2;
   letter-spacing: -0.02em;
 }
 
 .about-bio p + p {
-  margin-top: var(--space-48);
+  margin-top: 1.2em;
 }
 
 .about-bio a {
@@ -1146,28 +1120,25 @@ html.project-transition .explorations-copy {
   display: block;
 }
 
-/* Intro Section */
+/* Intro Section: tight title, then one-liner and metadata on a
+   12-column grid (metadata in the last four columns). */
 .case-study-intro {
-  margin: var(--space-24) calc(var(--space-24) / -2) var(--space-128);
-}
-
-.case-study-intro > * {
-  padding: 0 calc(var(--space-32) / 2);
+  margin: var(--space-24) 0 var(--space-128);
 }
 
 .case-study-title {
   font-family: var(--font-body);
-  font-size: 64px;
+  font-size: 72px;
   font-weight: 600;
-  letter-spacing: -0.02em;
-  word-spacing: 0.15em;
-  line-height: 1.1;
+  letter-spacing: -0.04em;
+  word-spacing: 0.08em; /* restore space width lost to the tight tracking */
+  line-height: 1;
   margin-bottom: var(--space-32);
 }
 
 @media (max-width: 767px) {
   .case-study-title {
-    font-size: clamp(40px, 11vw, 64px);
+    font-size: clamp(40px, 11vw, 72px);
     overflow-wrap: anywhere;
   }
 }
@@ -1176,15 +1147,16 @@ html.project-transition .explorations-copy {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
-  gap: var(--space-96);
+  gap: var(--space-32);
 }
 
 .case-study-description {
   flex: 1 1 200px;
   min-width: 0;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 500;
-  line-height: 120%;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
   color: var(--color-text);
 }
 
@@ -1195,31 +1167,55 @@ html.project-transition .explorations-copy {
   gap: var(--space-24) var(--space-48);
 }
 
-@media (min-width: 768px) {
-  .case-study-intro-row {
-    flex-wrap: nowrap;
-  }
-  
-  .case-study-description {
-    flex: 1 1 50%;
-    max-width: 50%;
-    min-width: 10ch;
-    padding-right: var(--space-96);
-  }
-  
-  .case-study-metadata {
-    flex: 0 0 auto;
-  }
-}
-
 .case-study-metadata-item {
   flex: 1 1 auto;
   min-width: 120px;
 }
 
+@media (min-width: 768px) {
+  .case-study-intro-row {
+    flex-wrap: nowrap;
+  }
+
+  .case-study-description {
+    flex: 1 1 50%;
+    max-width: 50%;
+    min-width: 10ch;
+    padding-right: var(--space-32);
+  }
+}
+
+@media (min-width: 1024px) {
+  .case-study-intro-row {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: var(--space-24);
+  }
+
+  .case-study-description {
+    grid-column: 1 / 7;
+    max-width: none;
+    padding-right: 0;
+  }
+
+  .case-study-metadata {
+    display: contents;
+  }
+
+  .case-study-metadata-item {
+    grid-column: span 2;
+    min-width: 0;
+  }
+
+  .case-study-metadata-item:first-child {
+    grid-column: 9 / span 2;
+  }
+}
+
 .case-study-metadata-label {
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 500;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--color-muted);
   margin-bottom: var(--space-4);
@@ -1234,6 +1230,9 @@ html.project-transition .explorations-copy {
 .case-study-metadata-value {
   color: var(--color-text);
   font-size: 16px;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
 }
 
 /* Divider */
@@ -1266,17 +1265,21 @@ html.project-transition .explorations-copy {
 
 .metric-value {
   font-size: 56px;
-  font-weight: 700;
+  font-weight: 600;
+  letter-spacing: -0.04em;
   line-height: 1;
   text-align: center;
   margin-bottom: var(--space-8);
 }
 
+/* Shares the caption style */
 .metric-label {
-  font-size: 12px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
   text-align: center;
-  text-transform: uppercase;
+  text-wrap: balance;
   color: var(--color-muted);
   max-width: 16em;
   margin-left: auto;
@@ -1309,9 +1312,10 @@ html.project-transition .explorations-copy {
 .figure-caption {
   font-size: 14px;
   font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
   color: var(--color-muted);
   margin-top: var(--space-8);
-  line-height: 120%;
 }
 
 /* Content Block Layouts */
@@ -1366,14 +1370,14 @@ html.project-transition .explorations-copy {
 .content-block-2col-text-block {
   flex: 1 1 auto;
   min-width: 0;
-  max-width: 56ch;
+  max-width: 40ch;
 }
 
 .content-block-2col-text-block p {
   font-size: 16px;
   font-weight: 500;
-  line-height: 1.4;
-  max-width: 56ch;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
   color: var(--color-text);
   margin: 0;
 }
@@ -1438,21 +1442,31 @@ html.project-transition .explorations-copy {
   display: block;
 }
 
+/* Text block: a narrow, tightly-tracked paragraph column offset to the
+   right on a 12-column grid. */
 .content-block-text {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--space-24);
+  margin: 0 0 var(--space-224);
+}
+
+.content-block-text p {
+  grid-column: 5 / -1;
+  max-width: 40ch;
   font-size: 16px;
   font-weight: 500;
-  line-height: 120%;
-  margin: 0 auto var(--space-224);
-  max-width: 56ch;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
 }
 
 .content-block-text p + p {
-  margin-top: var(--space-48);
+  margin-top: 1.25em;
 }
 
 @media (max-width: 767px) {
   .content-block-text {
-    max-width: 100%;
+    display: block;
   }
 }
 
