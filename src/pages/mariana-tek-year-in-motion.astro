@@ -17,8 +17,9 @@ const metrics = [
 <CaseStudyLayout
   title="Mariana Tek Year In Motion"
   description="A personalised end-of-year recap that highlights users' fitness journey."
-  heroImageSrc="/images/yearinmotion_hero.webp"
-  heroImageAlt="Case Study Two Hero"
+  heroVideo={{ webm: "/videos/yearinmotion_tile.webm", mp4: "/videos/yearinmotion_tile.mp4" }}
+  heroPoster="/images/yearinmotion-poster.webp"
+  heroImageAlt="Year in Motion's stat animations playing for one studio, then the same animation re-branded for seven studios"
   projectMedia="year-in-motion"
   metadata={metadata}
   metrics={metrics}
@@ -56,28 +57,53 @@ const metrics = [
     <p>To make the experience feel more immersive, I introduced motion as a core part of the storytelling. Animated transitions, paced stat reveals, and bold visual moments helped the recap feel less like a report and more like a celebration of progress.</p>
   </div>
 
-  <!-- Full width videos grid -->
+  <!-- Full width videos grid: every animation, in play order -->
   <div class="content-block-full">
     <div class="content-block-videos-grid">
       <Figure
-        videoSrc="/videos/yearinmotion_intro.webm"
-        alt="Year in Motion intro animation"
-        caption="Intro animation"
+        videoSrc="/videos/yearinmotion_anim_intro.webm"
+        alt="Year in Motion intro animation for Barry's"
+        caption="Intro"
       />
       <Figure
-        videoSrc="/videos/yearinmotion_minutes.webm"
-        alt="Year in Motion minutes stat"
-        caption="Minutes in class animation"
+        videoSrc="/videos/yearinmotion_anim_classes.webm"
+        alt="Year in Motion classes completed animation for Barry's"
+        caption="Classes completed"
       />
       <Figure
-        videoSrc="/videos/yearinmotion_instructors.webm"
-        alt="Year in Motion instructors stat"
-        caption="Top instructors animation"
+        videoSrc="/videos/yearinmotion_anim_minutes.webm"
+        alt="Year in Motion minutes in class animation for Barry's"
+        caption="Minutes in class"
       />
       <Figure
-        videoSrc="/videos/yearinmotion_outro.webm"
-        alt="Year in Motion outro animation"
-        caption="Outro animation"
+        videoSrc="/videos/yearinmotion_anim_topinstructors.webm"
+        alt="Year in Motion top instructors animation for Barry's"
+        caption="Top instructors"
+      />
+      <Figure
+        videoSrc="/videos/yearinmotion_anim_month.webm"
+        alt="Year in Motion most active month animation for Barry's"
+        caption="Most active month"
+      />
+      <Figure
+        videoSrc="/videos/yearinmotion_anim_daytime.webm"
+        alt="Year in Motion most active day & time animation for Barry's"
+        caption="Most active day & time"
+      />
+      <Figure
+        videoSrc="/videos/yearinmotion_anim_weekstreak.webm"
+        alt="Year in Motion week streak animation for Barry's"
+        caption="Week streak"
+      />
+      <Figure
+        videoSrc="/videos/yearinmotion_anim_challenges.webm"
+        alt="Year in Motion recent challenge animation for Barry's"
+        caption="Recent challenge"
+      />
+      <Figure
+        videoSrc="/videos/yearinmotion_anim_outro.webm"
+        alt="Year in Motion outro animation for Barry's"
+        caption="Outro"
       />
     </div>
   </div>
@@ -87,17 +113,12 @@ const metrics = [
     <p>The experience needed to accommodate a wide range of personalized stats, milestones, and activity patterns while still feeling visually consistent across many fitness brands. Using After Effects and Lottie, I created a flexible motion system that could dynamically inject customer data and brand elements like colors and logos, making the recap feel native to each studio's app.</p>
   </div>
 
-  <!-- Two-up images at bottom -->
-  <div class="content-block-2up">
+  <!-- Full width white-label video -->
+  <div class="content-block-full">
     <Figure
-      src="/images/yearinmotion_spinco.webp"
-      alt="Year in Motion Spinco screens"
-      caption="Spinco's branded year in motion screens."
-    />
-    <Figure
-      src="/images/yearinmotion_tremble.webp"
-      alt="Year in Motion Tremble screens"
-      caption="Tremble's branded year in motion screens."
+      videoSrc="/videos/yearinmotion_brands.webm"
+      alt="Three phones play the same Year in Motion animations in sync, each branded for a different studio and showing a different member's stats"
+      caption="The same animations had to work across 1,500+ brands, each with its own colours, logos and members' stats."
     />
   </div>
 </CaseStudyLayout>

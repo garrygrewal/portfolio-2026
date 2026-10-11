@@ -1455,17 +1455,30 @@ html.project-transition .explorations-copy {
   margin-bottom: var(--space-224);
 }
 
+/* Phone videos in play order: 3 per row, 5 per row on desktop. Rows wrap centred, so a short last row sits in the middle. */
 .content-block-videos-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-48);
-  max-width: 80%;
+  --cols: 3;
+  --col-gap: var(--space-16);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-32) var(--col-gap);
   margin: 0 auto;
 }
 
-@media (min-width: 768px) {
+.content-block-videos-grid > * {
+  width: calc((100% - (var(--cols) - 1) * var(--col-gap)) / var(--cols));
+}
+
+.content-block-videos-grid .figure-caption {
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
   .content-block-videos-grid {
-    grid-template-columns: repeat(4, 1fr);
+    --cols: 5;
+    --col-gap: var(--space-24);
+    gap: var(--space-48) var(--col-gap);
   }
 }
 
