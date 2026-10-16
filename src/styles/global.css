@@ -464,6 +464,11 @@ main {
 
 .tile-text {
   flex: none;
+  display: flex;
+  flex-wrap: wrap; /* description drops under the title when there's no room beside it */
+  column-gap: var(--space-24);
+  row-gap: var(--space-4);
+  align-items: flex-start;
   padding: var(--space-12) 0 0;
   box-sizing: border-box;
   filter: none;
@@ -478,29 +483,35 @@ main {
 .tile-label {
   display: block;
   font-family: var(--font-body);
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 600;
   letter-spacing: -0.03em;
   word-spacing: 0.06em; /* restore space width lost to the tight tracking */
   line-height: 1.1;
   color: var(--color-text);
   text-align: left;
-  padding: 0 0 var(--space-4);
+  padding: 0;
+  /* Left half of the tile, or wider when the title needs it */
+  flex: 0 0 auto;
+  min-width: calc(50% - var(--space-24) / 2);
+  max-width: 100%;
 }
 
-/* Same type as the case study text blocks, in grey */
+/* Same type as the image captions (.figure-caption), beside the title */
 .tile-description {
   display: block;
-  width: 100%;
   margin: 0;
   font-family: var(--font-body);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   line-height: 1.25;
   letter-spacing: -0.02em;
+  text-wrap: pretty;
   color: var(--color-muted);
   text-align: left;
   padding: 0;
+  flex: 1 1 0;
+  min-width: min(200px, 100%);
 }
 
 /* Video in tiles (e.g. tile-2) — same as image */
