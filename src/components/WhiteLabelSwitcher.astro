@@ -1,0 +1,183 @@
+---
+// Interactive white-label demo for the Xplor Rec case study: pick a city and the app
+// re-skins itself, or flip between light and dark mode. It cycles through cities on its
+// own while in view until someone interacts.
+interface Theme {
+  city: string;
+  slug: string;
+  color: string;
+}
+
+interface Props {
+  caption?: string;
+}
+
+const { caption } = Astro.props;
+
+const themes: Theme[] = [
+  { city: 'City of Santa Barbara', slug: 'santa-barbara', color: '#1d57c4' },
+  { city: 'City of Renton', slug: 'renton', color: '#b8901a' },
+  { city: 'City of Brampton', slug: 'brampton', color: '#11804a' },
+  { city: 'City of Rochester', slug: 'rochester', color: '#a8161b' }
+];
+
+const modes = ['dark', 'light'] as const;
+const shots = themes.flatMap((theme, city) => modes.map((mode) => ({ theme, city, mode })));
+---
+
+<figure class="figure white-label" data-white-label data-mode="dark" style={`--brand: ${themes[0].color}`}>
+  <div class="white-label-stage">
+    <div class="white-label-modes" role="group" aria-label="Appearance">
+      <span class="white-label-mode-thumb" aria-hidden="true"></span>
+      <button type="button" class="white-label-mode" data-white-label-mode="dark" aria-pressed="true">
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M13.5 9.6A5.5 5.5 0 0 1 6.4 2.5a5.5 5.5 0 1 0 7.1 7.1Z" fill="currentColor"/></svg>
+        Dark
+      </button>
+      <button type="button" class="white-label-mode" data-white-label-mode="light" aria-pressed="false">
+        <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><circle cx="8" cy="8" r="3" fill="currentColor"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3 3l1.4 1.4M11.6 11.6 13 13M3 13l1.4-1.4M11.6 4.4 13 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        Light
+      </button>
+    </div>
+
+    <div class="white-label-phone">
+      <div class="white-label-screen">
+        {shots.map(({ theme, city, mode }, i) => (
+          <img
+            src={`/images/rec-whitelabel/${theme.slug}${mode === 'light' ? '-light' : ''}.webp`}
+            alt={`Home screen of the Rec app branded for the ${theme.city}, in ${mode} mode`}
+            class="white-label-shot"
+            data-city={city}
+            data-mode={mode}
+            aria-hidden={i === 0 ? undefined : 'true'}
+            style={`z-index: ${i === 0 ? 1 : 0}`}
+            loading={i === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+        ))}
+      </div>
+      <img src="/images/rec-whitelabel/iphone-17-pro-silver.webp" alt="" class="white-label-bezel" />
+    </div>
+
+    <p class="white-label-hint">Tap a city to rebrand the app</p>
+
+    <div class="white-label-cities" role="group" aria-label="Choose a city">
+      {themes.map((theme, i) => (
+        <button
+          type="button"
+          class="white-label-city"
+          data-white-label-city={i}
+          data-color={theme.color}
+          aria-pressed={i === 0 ? 'true' : 'false'}
+          aria-label={theme.city}
+        >
+          <img src={`/images/rec-whitelabel/${theme.slug}-logo.webp`} alt="" class="white-label-logo" />
+          <img src={`/images/rec-whitelabel/${theme.slug}-logo-light.webp`} alt="" class="white-label-logo white-label-logo--light" />
+          <span class="white-label-progress" aria-hidden="true"></span>
+        </button>
+      ))}
+    </div>
+  </div>
+  {caption && <figcaption class="figure-caption">{caption}</figcaption>}
+</figure>
+
+<script>
+  const CYCLE_MS = 3200;
+
+  document.querySelectorAll<HTMLElement>('[data-white-label]').forEach((root) => {
+    const shots = Array.from(root.querySelectorAll<HTMLImageElement>('.white-label-shot'));
+    const cities = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-white-label-city]'));
+    const modeButtons = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-white-label-mode]'));
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let city = 0;
+    let mode = 'dark';
+    let shown = shots[0];
+    let topZ = 1;
+    let timer: number | undefined;
+    let inView = false;
+    let userTookOver = false;
+
+    const show = (nextCity: number, nextMode: string) => {
+      if (nextCity === city && nextMode === mode) return;
+      const shot = shots.find((s) => Number(s.dataset.city) === nextCity && s.dataset.mode === nextMode)!;
+      shot.style.zIndex = String(++topZ);
+      shot.removeAttribute('aria-hidden');
+      shown.setAttribute('aria-hidden', 'true');
+
+      if (reduced.matches) {
+        shot.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, easing: 'ease' });
+      } else if (nextCity !== city) {
+        // A new brand pours in from the top of the screen, where the header colour lives.
+        shot.animate(
+          [{ clipPath: 'circle(0% at 50% 0%)' }, { clipPath: 'circle(150% at 50% 0%)' }],
+          { duration: 900, easing: 'cubic-bezier(0.65, 0, 0.35, 1)' }
+        );
+      } else {
+        // Appearance changes crossfade, the way iOS switches between light and dark.
+        shot.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 450, easing: 'ease-in-out' });
+      }
+
+      cities.forEach((c, i) => c.setAttribute('aria-pressed', String(i === nextCity)));
+      modeButtons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.whiteLabelMode === nextMode)));
+      root.style.setProperty('--brand', cities[nextCity].dataset.color!);
+      root.dataset.mode = nextMode;
+      city = nextCity;
+      mode = nextMode;
+      shown = shot;
+    };
+
+    const stop = () => {
+      window.clearInterval(timer);
+      timer = undefined;
+      root.classList.remove('is-cycling');
+    };
+
+    const restartProgress = () => {
+      root.classList.remove('is-ticking');
+      void root.offsetWidth;
+      root.classList.add('is-ticking');
+    };
+
+    const start = () => {
+      if (timer || userTookOver || !inView || reduced.matches) return;
+      root.classList.add('is-cycling');
+      restartProgress();
+      timer = window.setInterval(() => {
+        show((city + 1) % cities.length, mode);
+        restartProgress();
+      }, CYCLE_MS);
+    };
+
+    const takeOver = () => {
+      userTookOver = true;
+      stop();
+    };
+
+    cities.forEach((button, i) => {
+      button.addEventListener('click', () => {
+        takeOver();
+        show(i, mode);
+      });
+    });
+
+    modeButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        takeOver();
+        show(city, button.dataset.whiteLabelMode!);
+      });
+    });
+
+    new IntersectionObserver(
+      ([entry]) => {
+        inView = entry.isIntersecting;
+        if (inView) start();
+        else stop();
+      },
+      { threshold: 0.5 }
+    ).observe(root);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop();
+      else start();
+    });
+  });
+</script>

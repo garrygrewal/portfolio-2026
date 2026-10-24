@@ -1,6 +1,7 @@
 ---
 import CaseStudyLayout from '../layouts/CaseStudyLayout.astro';
 import Figure from '../components/Figure.astro';
+import WhiteLabelSwitcher from '../components/WhiteLabelSwitcher.astro';
 
 const metadata = [
   { label: 'Platform', values: ['Mobile (iOS & Android)'] },
@@ -76,13 +77,7 @@ const metrics = [
 
   <!-- Full width image -->
   <div class="content-block-full">
-    <Figure
-      videoSrc="/videos/recmobile_whitelabel.webm"
-      videoFallbackSrc="/videos/recmobile_whitelabel.mp4"
-      poster="/images/recmobile-whitelabel-poster.webp"
-      alt="The Rec Mobile app themed for Santa Barbara, Renton, Brampton and Rochester"
-      caption="A flexible white-label design system allowed the app to scale across different cities and recreation brands."
-    />
+    <WhiteLabelSwitcher caption="A flexible white-label design system allowed the app to scale across different cities and recreation brands." />
   </div>
 
   <!-- Offset right image -->

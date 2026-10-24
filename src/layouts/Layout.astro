@@ -244,6 +244,46 @@ const { title = 'Garry Grewal' } = Astro.props;
       } catch (err) {}
     });
 
+    // Email links copy the address instead of opening a mail app, with an italic "Copied" tooltip.
+    // Modified clicks (new tab, etc.) and browsers without clipboard access fall back to mailto.
+    const copyTip = document.createElement('div');
+    copyTip.className = 'copy-tip';
+    copyTip.setAttribute('role', 'status');
+    copyTip.textContent = 'Copied';
+    document.body.append(copyTip);
+    let copyTipTimer;
+
+    const showCopyTip = (link) => {
+      const rect = link.getBoundingClientRect();
+      copyTip.classList.remove('is-visible');
+      copyTip.style.left = '0px';
+      const tipWidth = copyTip.offsetWidth;
+      const margin = 8;
+      const left = Math.min(
+        Math.max(rect.left + rect.width / 2 - tipWidth / 2, margin),
+        window.innerWidth - tipWidth - margin
+      );
+      copyTip.style.left = `${left}px`;
+      copyTip.style.top = `${rect.top - copyTip.offsetHeight - 8}px`;
+      void copyTip.offsetWidth;
+      copyTip.classList.add('is-visible');
+      clearTimeout(copyTipTimer);
+      copyTipTimer = setTimeout(() => copyTip.classList.remove('is-visible'), 1400);
+    };
+
+    window.addEventListener('scroll', () => copyTip.classList.remove('is-visible'), { passive: true });
+
+    document.addEventListener('click', (event) => {
+      const link = event.target instanceof Element ? event.target.closest('a[href^="mailto:"]') : null;
+      if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || !navigator.clipboard) return;
+      event.preventDefault();
+      const address = decodeURIComponent(link.getAttribute('href').slice('mailto:'.length).split('?')[0]);
+      navigator.clipboard.writeText(address).then(
+        () => showCopyTip(link),
+        () => { location.href = link.href; }
+      );
+    });
+
     const setHeaderCenterWidth = () => {
     const nav = document.querySelector('.header-nav');
     if (!nav) return;

@@ -1,0 +1,25 @@
+---
+// Project title that turns into Playfair italic, letter by letter, when its tile is hovered.
+// Screen readers get the plain title; the per-letter spans are presentation only.
+interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+let index = 0;
+const words = text.split(' ').map((word) => [...word].map((char) => ({ char, i: index++ })));
+---
+
+<span class="tile-label">
+  <span class="sr-only">{text}</span>
+  <span class="tile-label-letters" aria-hidden="true">
+    {words.map((letters, w) => (
+      <>
+        <span class="tile-label-word">
+          {letters.map(({ char, i }) => <span class="tile-label-char" style={`--i: ${i}`}>{char}</span>)}
+        </span>
+        {w < words.length - 1 && ' '}
+      </>
+    ))}
+  </span>
+</span>

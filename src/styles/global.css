@@ -72,6 +72,18 @@
   box-sizing: border-box;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 html {
   color-scheme: light;
   overflow-anchor: none;
@@ -355,6 +367,43 @@ main {
   letter-spacing: -0.01em;
 }
 
+/* Tooltip shown after an email link copies its address */
+.copy-tip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  padding: var(--space-4) var(--space-12) 6px;
+  border-radius: 999px;
+  background: var(--color-text);
+  color: var(--color-bg);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 18px;
+  line-height: 1.2;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px) scale(0.96);
+  transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.3);
+}
+
+.copy-tip.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copy-tip {
+    transform: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .copy-tip.is-visible {
+    transform: none;
+  }
+}
+
 .footer-logo {
   font-family: var(--font-display);
   font-size: 40px;
@@ -495,6 +544,34 @@ main {
   flex: 0 0 auto;
   min-width: calc(50% - var(--space-24) / 2);
   max-width: 100%;
+}
+
+/* Hover voice: the title turns into Playfair italic one letter at a time, left to right,
+   and back again when the pointer leaves. font-family can't tween, so each letter flips
+   after its own delay. */
+.tile-label-word {
+  white-space: nowrap;
+}
+
+.tile-label-char {
+  transition-property: font-family, font-style, font-weight, letter-spacing;
+  transition-duration: 0s;
+  transition-behavior: allow-discrete;
+  transition-delay: calc(var(--i) * 14ms);
+}
+
+.tile:hover .tile-label-char,
+.tile:focus-visible .tile-label-char {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile-label-char {
+    transition-delay: 0s;
+  }
 }
 
 /* Same type as the image captions (.figure-caption), beside the title */
@@ -1764,5 +1841,289 @@ html.project-transition .explorations-copy {
   ::view-transition-old(*),
   ::view-transition-new(*) {
     animation-duration: 0.01ms !important;
+  }
+}
+
+/* ==========================================================================
+   White-label switcher (Xplor Rec case study)
+   ========================================================================== */
+
+@property --brand {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #1d57c4;
+}
+
+@property --wl-bg {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #181818;
+}
+
+@property --wl-glow {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 42%;
+}
+
+/* Stage colours follow the phone's appearance: dark by default, light when toggled */
+.white-label {
+  --wl-bg: #181818;
+  --wl-glow: 42%;
+  --wl-line: rgba(255, 255, 255, 0.16);
+  --wl-wash: rgba(255, 255, 255, 0.04);
+  --wl-ink: var(--color-text);
+  --wl-ink-inverse: var(--color-bg);
+  --wl-muted: var(--color-muted);
+  --wl-progress: rgba(255, 255, 255, 0.14);
+  --wl-shadow: rgba(0, 0, 0, 0.55);
+  transition:
+    --brand 0.9s cubic-bezier(0.65, 0, 0.35, 1),
+    --wl-bg 0.5s ease-in-out,
+    --wl-glow 0.5s ease-in-out;
+}
+
+.white-label[data-mode='light'] {
+  --wl-bg: #ececec;
+  --wl-glow: 30%;
+  --wl-line: rgba(0, 0, 0, 0.12);
+  --wl-wash: rgba(0, 0, 0, 0.04);
+  --wl-ink: #111111;
+  --wl-ink-inverse: #ffffff;
+  --wl-muted: #777777;
+  --wl-progress: rgba(0, 0, 0, 0.08);
+  --wl-shadow: rgba(0, 0, 0, 0.18);
+}
+
+.white-label-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-64) var(--space-16) 40px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 55% 60% at 50% 42%, color-mix(in srgb, var(--brand) var(--wl-glow), transparent), transparent 70%),
+    var(--wl-bg);
+}
+
+.white-label-modes {
+  position: relative;
+  display: flex;
+  margin-bottom: var(--space-24);
+  padding: 3px;
+  border: 1px solid var(--wl-line);
+  border-radius: 999px;
+  transition: border-color 0.5s ease;
+}
+
+/* Sliding pill behind the active mode */
+.white-label-mode-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 80px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--wl-ink);
+  transition: transform 0.4s cubic-bezier(0.3, 1.3, 0.5, 1), background-color 0.5s ease;
+}
+
+.white-label[data-mode='light'] .white-label-mode-thumb {
+  transform: translateX(80px);
+}
+
+.white-label-mode {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 80px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--wl-muted);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.white-label-mode:hover {
+  color: var(--wl-ink);
+}
+
+.white-label-mode[aria-pressed='true'] {
+  color: var(--wl-ink-inverse);
+}
+
+.white-label-mode:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .white-label-mode-thumb {
+    transition: none;
+  }
+}
+
+.white-label-phone {
+  position: relative;
+  /* Sized so the phone, hint and cities fit in one viewport */
+  width: clamp(230px, calc((100svh - 360px) * 0.489), 320px);
+  aspect-ratio: 1350 / 2760;
+  filter: drop-shadow(0 32px 48px var(--wl-shadow));
+  transition: filter 0.5s ease;
+}
+
+/* Screen sits in the iPhone 17 Pro bezel's cutout (72, 69, 1206 x 2622 of 1350 x 2760).
+   The radius is a little tighter than the cutout; the bezel's black border hides the overlap. */
+.white-label-screen {
+  position: absolute;
+  left: 5.333%;
+  top: 2.5%;
+  width: 89.333%;
+  height: 95%;
+  border-radius: 12.4% / 5.7%;
+  overflow: hidden;
+  isolation: isolate;
+  background: #1c1b22;
+}
+
+.white-label-bezel {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+.white-label-shot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.white-label-hint {
+  margin: var(--space-32) 0 var(--space-12);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--wl-muted);
+  transition: color 0.5s ease;
+}
+
+.white-label-cities {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-8);
+}
+
+.white-label-city {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 56px;
+  padding: 0 var(--space-16);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  overflow: hidden;
+  isolation: isolate;
+  opacity: 0.4;
+  transition: opacity 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.white-label[data-mode='light'] .white-label-city {
+  opacity: 0.55;
+}
+
+.white-label-city:hover,
+.white-label[data-mode='light'] .white-label-city:hover {
+  opacity: 0.75;
+}
+
+.white-label .white-label-city[aria-pressed='true'],
+.white-label[data-mode='light'] .white-label-city[aria-pressed='true'] {
+  opacity: 1;
+  border-color: var(--wl-line);
+  background-color: var(--wl-wash);
+}
+
+.white-label-city:focus-visible {
+  outline: 2px solid var(--color-link);
+  outline-offset: 2px;
+}
+
+.white-label-logo {
+  grid-area: 1 / 1;
+  display: block;
+  height: 28px;
+  width: auto;
+  transition: opacity 0.5s ease;
+}
+
+/* Dark-ink logo variants sit on top and fade in for the light stage */
+.white-label-logo--light {
+  opacity: 0;
+}
+
+.white-label[data-mode='light'] .white-label-logo--light {
+  opacity: 1;
+}
+
+.white-label[data-mode='light'] .white-label-logo:not(.white-label-logo--light) {
+  opacity: 0;
+}
+
+/* Auto-cycle timer: the active city's pill slowly fills left to right, like a
+   "next episode" button, then the next city takes over */
+.white-label-progress {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--wl-progress);
+  transform: scaleX(0);
+  transform-origin: left center;
+  opacity: 0;
+}
+
+.white-label.is-cycling.is-ticking .white-label-city[aria-pressed='true'] .white-label-progress {
+  opacity: 1;
+  animation: white-label-progress 3.2s linear forwards;
+}
+
+@keyframes white-label-progress {
+  to { transform: scaleX(1); }
+}
+
+@media (max-width: 767px) {
+  .white-label-stage {
+    padding-top: var(--space-64);
+  }
+
+  .white-label-phone {
+    width: 250px;
+  }
+
+  .white-label-city {
+    height: 48px;
+    padding: 0 var(--space-12);
+  }
+
+  .white-label-logo {
+    height: 22px;
   }
 }
