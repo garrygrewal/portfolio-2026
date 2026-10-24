@@ -14,8 +14,82 @@ const { metrics } = Astro.props;
 <div class="metrics-row">
   {metrics.map((metric) => (
     <div class="metric">
-      <div class="metric-value">{metric.value}</div>
+      <div class="metric-value">
+        <span class="metric-value-sizer" aria-hidden="true">{metric.value}</span>
+        <span class="metric-value-number" data-count-to={metric.value}>{metric.value}</span>
+      </div>
       <div class="metric-label">{metric.label}</div>
     </div>
   ))}
 </div>
+
+<script>
+  const DURATION = 1000;
+
+  // Climbs at a constant rate, but everything below the leading digit is
+  // re-rolled every frame so the count reads as a blur rather than a tick.
+  const scramble = (current: number, max: number) => {
+    const ceiling = Math.min(max, 9);
+    if (current < 10) return Math.floor(Math.random() * (ceiling + 1));
+    const place = 10 ** (Math.floor(Math.log10(current)));
+    const lead = Math.floor(current / place) * place;
+    return Math.min(max, lead + Math.floor(Math.random() * place));
+  };
+
+  const counters = Array.from(document.querySelectorAll<HTMLElement>('[data-count-to]'))
+    .map((el) => {
+      const match = el.dataset.countTo!.match(/^(\D*)(\d[\d,]*(?:\.\d+)?)(.*)$/);
+      if (!match) return null;
+      const [, prefix, digits, suffix] = match;
+      const decimals = (digits.split('.')[1] || '').length;
+      const format = new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals,
+        useGrouping: digits.includes(','),
+      });
+      return {
+        el,
+        target: parseFloat(digits.replace(/,/g, '')),
+        step: 10 ** -decimals,
+        render: (n: number) => (el.textContent = prefix + format.format(n) + suffix),
+      };
+    })
+    .filter((c) => c !== null);
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (counters.length && !reduced && 'IntersectionObserver' in window) {
+    // One loop per row so every number lands on the same frame
+    const run = (group: typeof counters) => {
+      const start = performance.now();
+      const tick = (now: number) => {
+        const t = Math.min(Math.max((now - start) / DURATION, 0), 1);
+        for (const counter of group) {
+          if (t === 1) {
+            counter.render(counter.target);
+            continue;
+          }
+          const units = Math.round(counter.target / counter.step);
+          counter.render(scramble(Math.floor(units * t), units) * counter.step);
+        }
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+
+    counters.forEach((c) => c.render(0));
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          observer.unobserve(entry.target);
+          run(counters.filter((c) => entry.target.contains(c.el)));
+        }
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -10% 0px' }
+    );
+
+    document.querySelectorAll('.metrics-row').forEach((row) => observer.observe(row));
+  }
+</script>

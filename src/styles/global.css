@@ -1275,12 +1275,24 @@ html.project-transition .explorations-copy {
 }
 
 .metric-value {
+  display: grid;
+  justify-content: center;
+  justify-items: end;
   font-size: 56px;
   font-weight: 600;
   letter-spacing: -0.04em;
   line-height: 1;
-  text-align: center;
+  font-variant-numeric: tabular-nums;
   margin-bottom: var(--space-8);
+}
+
+/* Invisible copy of the final value reserves its width while the count runs */
+.metric-value > span {
+  grid-area: 1 / 1;
+}
+
+.metric-value-sizer {
+  visibility: hidden;
 }
 
 /* Shares the caption style */
