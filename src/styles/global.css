@@ -172,10 +172,21 @@ main {
   position: sticky;
   top: 0;
   z-index: 100;
+  /* Eased scrim: opacity falls off along a curve rather than linearly */
   background: linear-gradient(
     180deg,
-    rgba(17, 17, 17, 0.92) 0%,
-    rgba(17, 17, 17, 0.72) 55%,
+    rgba(17, 17, 17, 0.75) 0%,
+    rgba(17, 17, 17, 0.553) 19%,
+    rgba(17, 17, 17, 0.406) 34%,
+    rgba(17, 17, 17, 0.287) 47%,
+    rgba(17, 17, 17, 0.209) 56.5%,
+    rgba(17, 17, 17, 0.146) 65%,
+    rgba(17, 17, 17, 0.095) 73%,
+    rgba(17, 17, 17, 0.056) 80.2%,
+    rgba(17, 17, 17, 0.032) 86.1%,
+    rgba(17, 17, 17, 0.016) 91%,
+    rgba(17, 17, 17, 0.006) 95.2%,
+    rgba(17, 17, 17, 0.002) 98.2%,
     rgba(17, 17, 17, 0) 100%
   );
   view-transition-name: site-header;
