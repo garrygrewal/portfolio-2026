@@ -1,6 +1,7 @@
 ---
 import CaseStudyLayout from '../layouts/CaseStudyLayout.astro';
 import Figure from '../components/Figure.astro';
+import LiveBooking from '../components/LiveBooking.astro';
 
 const metadata = [
   { label: 'Platform', values: ['Web', 'Mobile (iOS & Android)'] },
@@ -71,17 +72,8 @@ const metrics = [
     <p>The feature had to work across both sides of the business: internal staff managing schedules, availability, and setup, and consumers browsing and booking services. Designing across both touchpoints helped ensure the experience felt connected from studio operations to checkout.</p>
   </div>
 
-  <!-- Two-up images at bottom -->
-  <div class="content-block-2up">
-    <Figure
-      src="/images/mt-appts-admin.webp"
-      alt="Two-up image left"
-      caption="Studios manage appointments through the web admin dashboard and mobile business app."
-    />
-    <Figure
-      src="/images/mt-appts-consumer.webp"
-      alt="Two-up image right"
-      caption="Consumers book appointments through the studio's website or mobile app."
-    />
+  <!-- Live booking demo: consumer app and admin calendar -->
+  <div class="content-block-full">
+    <LiveBooking caption="A booking made in the studio's app lands straight on the admin calendar, in the instructor's column at the booked time." />
   </div>
 </CaseStudyLayout>

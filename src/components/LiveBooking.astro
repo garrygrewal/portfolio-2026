@@ -1,0 +1,777 @@
+---
+// Interactive two-sided booking demo for the Mariana Tek Appointments case study: book a session in the consumer app
+// (pick a time, choose Myself or Guest, tap Reserve) and the appointment lands live on the studio's admin calendar, in
+// that instructor's column at that time, then the appointment's details slide out over the calendar, as they do in the
+// admin. While in view it books a few sessions on its own until someone interacts.
+// Shares the Rec switcher's stage, phone and bezel styles (.white-label-*); the screens are built from the Figma specs.
+interface Instructor {
+  id: string;
+  name: string;
+}
+
+interface Appointment {
+  col: string;
+  start: number; // half-hours after 8:00 AM
+  length: number; // in half-hours
+  time: string;
+  customer: string;
+  type: string;
+  count: string;
+}
+
+interface Props {
+  caption?: string;
+}
+
+const { caption } = Astro.props;
+
+// Consumer app: the two instructors who teach 1:1 Private Pilates, with their open times that day (from the Figma)
+const trainers = [
+  { id: 'marla', name: 'Marla Lopez', previously: true, hours: [8, 11, 12, 14] },
+  { id: 'carol', name: 'Carol Ann', previously: false, hours: [8, 11] }
+];
+const label = (hour: number) => `${hour > 12 ? hour - 12 : hour}:00 ${hour < 12 ? 'AM' : 'PM'}`;
+
+// Admin calendar: a close crop of the day view by instructor, from 8:00 AM. Marla and Carol come first so their
+// columns stay in view beside the slideout; the rest of the studio's day fills in around them, as in the Figma.
+const columns: Instructor[] = [
+  { id: 'marla', name: 'Marla Lopez' },
+  { id: 'carol', name: 'Carol Ann' },
+  { id: 'brooke', name: 'Brooke Wilson' },
+  { id: 'lucy', name: 'Lucy Nguyen' }
+];
+const rows = [8, 9, 10, 11, 12, 13, 14].flatMap((hour) => [label(hour), label(hour).replace(':00', ':30')]);
+const unavailable = [
+  { col: 'brooke', start: 6, length: 2 },
+  { col: 'lucy', start: 11, length: 3 }
+];
+const appointments: Appointment[] = [
+  { col: 'brooke', start: 0, length: 2, time: '8:00 AM - 9:00 AM', customer: 'Sarah Smith', type: 'PT 1:1 60 mins', count: '1/1' },
+  { col: 'brooke', start: 3, length: 2, time: '9:30 AM - 10:30 AM', customer: 'Kathy Bates', type: 'PT 1:1 60 mins', count: '0/1' },
+  { col: 'marla', start: 2, length: 2, time: '9:00 AM - 10:00 AM', customer: 'Nina Park', type: 'Pilates 1:1 60 mins', count: '1/1' },
+  { col: 'carol', start: 3, length: 2, time: '9:30 AM - 10:30 AM', customer: 'Olivia Chen', type: 'Pilates 1:1 60 mins', count: '0/1' },
+  { col: 'lucy', start: 0, length: 1.5, time: '8:00 AM - 8:45 AM', customer: 'Erica Frank', type: 'PT 1:1 45 mins', count: '0/1' },
+  { col: 'lucy', start: 4, length: 2, time: '10:00 AM - 11:00 AM', customer: 'Josh George', type: 'PT 1:1 60 mins', count: '1/1' },
+  { col: 'brooke', start: 9, length: 2, time: '12:30 PM - 1:30 PM', customer: 'Maya Patel', type: 'PT 1:1 60 mins', count: '1/1' }
+];
+const instructorName = (id: string) => columns.find((c) => c.id === id)!.name;
+---
+
+<figure class="figure white-label booking" data-booking data-mode="dark" style="--brand: #6923f4">
+  <div class="white-label-stage">
+    <div class="booking-pair">
+      <div class="white-label-phone booking-phone">
+        <div class="white-label-screen booking-screen">
+          <div class="booking-app" data-booking-app>
+            <div class="booking-hero">
+              <img src="/images/mt-booking/pilates.webp" alt="" class="booking-hero-photo" />
+              <div class="booking-hero-text">
+                <p class="booking-hero-title">1:1 Private Pilates</p>
+                <p class="booking-hero-length">60 minutes</p>
+              </div>
+            </div>
+
+            <div class="booking-statusbar" aria-hidden="true">
+              <span class="booking-statusbar-time">9:41</span>
+              <img src="/images/mt-booking/status-cellular.svg" alt="" class="booking-statusbar-cellular" />
+              <img src="/images/mt-booking/status-wifi.svg" alt="" class="booking-statusbar-wifi" />
+              <span class="booking-statusbar-battery"></span>
+              <img src="/images/mt-booking/status-cap.svg" alt="" class="booking-statusbar-cap" />
+            </div>
+
+            <div class="booking-nav" aria-hidden="true">
+              <span class="booking-nav-button">
+                <svg viewBox="0 0 20 20" width="20" height="20"><path d="m5 5 10 10M15 5 5 15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </span>
+              <span class="booking-nav-group">
+                <span class="booking-nav-button">
+                  <svg viewBox="0 0 20 20" width="20" height="20"><path d="M10 16.6S3.5 12.7 3.5 7.9A3.4 3.4 0 0 1 10 6.3a3.4 3.4 0 0 1 6.5 1.6c0 4.8-6.5 8.7-6.5 8.7Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>
+                </span>
+                <span class="booking-nav-button">
+                  <svg viewBox="0 0 20 20" width="20" height="20"><path d="M10 2.5v10M6.6 5.9 10 2.5l3.4 3.4M7 8.5H5.5v9h9v-9H13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+              </span>
+            </div>
+
+            <div class="booking-body">
+              <h3 class="booking-heading">Description</h3>
+              <p class="booking-description">A 1:1 session tailored to your body, goals, and pace. Your instructor will guide you through personalized reformer and/or mat work to build strength, improve mobility, and refine alignment.</p>
+              <hr class="booking-rule" />
+              <h3 class="booking-heading">Reserve</h3>
+              <p class="booking-date">
+                <img src="/images/mt-booking/calendar-month.svg" alt="" width="20" height="20" />
+                Thursday, October 5, 2025
+              </p>
+
+              {trainers.map((trainer) => (
+                <div class="booking-trainer">
+                  <div class="booking-trainer-row">
+                    <span class="booking-avatar">
+                      <img src="/images/mt-booking/avatar-ring.svg" alt="" class="booking-avatar-ring" />
+                      <img src={`/images/mt-booking/${trainer.id}.webp`} alt="" class="booking-avatar-photo" width="40" height="40" />
+                    </span>
+                    <span class="booking-trainer-name">
+                      {trainer.name}
+                      {trainer.previously && <span class="booking-trainer-note">(Previously booked)</span>}
+                    </span>
+                  </div>
+                  <div class="booking-slots" role="group" aria-label={`Times with ${trainer.name}`}>
+                    {trainer.hours.map((hour) => (
+                      <button
+                        type="button"
+                        class="booking-slot"
+                        data-booking-slot
+                        data-trainer={trainer.id}
+                        data-hour={hour}
+                        aria-label={`${label(hour)} with ${trainer.name}`}
+                      >
+                        {label(hour)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <button type="button" class="booking-backdrop" data-booking-close tabindex="-1" aria-label="Close"></button>
+
+          <div class="booking-sheet" data-booking-sheet role="group" aria-label="Reserve 1:1 Private Pilates" inert>
+            <div class="booking-sheet-section">
+              <p class="booking-sheet-title">1:1 Private Pilates</p>
+              <p class="booking-sheet-when" data-booking-when>Thursday, October 5, 2025 at 11:00 AM PST</p>
+              <p class="booking-sheet-detail">Capitol Hill</p>
+              <p class="booking-sheet-detail">60 min</p>
+              <p class="booking-sheet-detail" data-booking-with>Marla Lopez</p>
+            </div>
+            <div class="booking-sheet-section">
+              <p class="booking-sheet-label">Reserve For</p>
+              <div class="booking-segments" role="group" aria-label="Reserve for" data-for="myself">
+                <span class="booking-segments-thumb" aria-hidden="true"></span>
+                <button type="button" class="booking-segment" data-booking-for="myself" aria-pressed="true">Myself</button>
+                <button type="button" class="booking-segment" data-booking-for="guest" aria-pressed="false">Guest</button>
+              </div>
+            </div>
+            <div class="booking-sheet-section booking-sheet-pay">
+              <div class="booking-pay">
+                <span>
+                  <span class="booking-sheet-label">Pay With</span>
+                  <span class="booking-sheet-detail">10 Pilates Pack (8/10, Exp: 5/11/2026)</span>
+                </span>
+                <img src="/images/mt-booking/chevron-right.svg" alt="" class="booking-chevron" width="24" height="24" />
+              </div>
+              <button type="button" class="booking-reserve" data-booking-reserve>
+                <span class="booking-reserve-face booking-reserve-face--idle" data-booking-reserve-idle>Reserve</span>
+                <span class="booking-reserve-face booking-reserve-face--done" data-booking-reserve-done aria-hidden="true">
+                  <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path d="m4.5 10.5 3.5 3.5 7.5-8" pathLength="1" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  Booked
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <span class="booking-home-indicator" aria-hidden="true"></span>
+        </div>
+        <img src="/images/rec-whitelabel/iphone-17-pro-silver.webp" alt="" class="white-label-bezel" />
+      </div>
+
+      <div class="booking-browser" role="group" aria-label="The studio's admin calendar for Thursday, October 5, 2025">
+        <div class="booking-admin">
+          <div class="booking-chrome" aria-hidden="true">
+            <span class="booking-chrome-dots"><span></span><span></span><span></span></span>
+            <span class="booking-chrome-url">acme.marianatek.com/admin</span>
+          </div>
+
+          <div class="booking-admin-header">
+            <p class="booking-admin-title">Appointments</p>
+            <span class="booking-admin-today" aria-hidden="true">Today</span>
+            <span class="booking-admin-date">
+              <img src="/images/mt-booking/admin-chevron-left.svg" alt="" />
+              Thursday, October 5, 2025
+              <img src="/images/mt-booking/admin-chevron-right.svg" alt="" />
+            </span>
+            <span class="booking-admin-views" aria-hidden="true">
+              <span>List</span><span class="is-active">Day</span><span>Week</span>
+            </span>
+          </div>
+
+          <div class="booking-cal-head" aria-hidden="true">
+            <span></span>
+            {columns.map((col) => (
+              <span class="booking-cal-name" data-col={col.id}>{col.name}</span>
+            ))}
+          </div>
+
+          <div class="booking-cal" data-booking-cal>
+            <div class="booking-cal-grid">
+              <div class="booking-cal-times" aria-hidden="true">
+                {rows.map((row) => <span>{row}</span>)}
+              </div>
+              {columns.map((col) => (
+                <div class="booking-cal-col" data-booking-col={col.id}>
+                  {unavailable.filter((u) => u.col === col.id).map((u) => (
+                    <span class="booking-cal-off" style={`--start: ${u.start}; --length: ${u.length}`}></span>
+                  ))}
+                  {appointments.filter((a) => a.col === col.id).map((a) => (
+                    <div class:list={['booking-tile', { 'booking-tile--short': a.length < 2 }]} style={`--start: ${a.start}; --length: ${a.length}`}>
+                      <span class="booking-tile-time">{a.time}</span>
+                      <span class="booking-tile-name">{a.customer}</span>
+                      <span class="booking-tile-type">{a.type}</span>
+                      <span class="booking-tile-meta">
+                        <span>{instructorName(a.col)}</span>
+                        <span class="booking-tile-count">{a.count}</span>
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <span class="booking-dim" aria-hidden="true"></span>
+
+          <section class="booking-slideout" data-booking-slideout aria-label="Appointment details" inert>
+            <div class="booking-slideout-header">
+              <div>
+                <p class="booking-slideout-title">1:1 Private Pilates</p>
+                <p class="booking-slideout-sub" data-slideout-with>with Marla Lopez</p>
+              </div>
+              <button type="button" class="booking-slideout-x" data-slideout-close aria-label="Close appointment details">
+                <img src="/images/mt-booking/slideout-x.svg" alt="" />
+              </button>
+            </div>
+
+            <div class="booking-slideout-body">
+              <div class="booking-accordion booking-accordion--details">
+                <h4 class="booking-accordion-heading">
+                  <button type="button" aria-expanded="true" aria-controls="booking-details" data-accordion>
+                    Appointment Details
+                    <img src="/images/mt-booking/slideout-chevron-up.svg" alt="" />
+                  </button>
+                </h4>
+                <div class="booking-accordion-panel" id="booking-details">
+                  <p class="booking-detail">
+                    <img src="/images/mt-booking/slideout-person.svg" alt="" />
+                    <span data-slideout-instructor>Marla Lopez</span>
+                  </p>
+                  <p class="booking-detail">
+                    <img src="/images/mt-booking/slideout-location.svg" alt="" />
+                    <span>Reformer Room 1<span class="booking-detail-sub">Capitol Hill</span></span>
+                  </p>
+                  <p class="booking-detail">
+                    <img src="/images/mt-booking/slideout-clock.svg" alt="" />
+                    <span data-slideout-time>11:00 AM - 12:00 PM</span>
+                  </p>
+                  <p class="booking-detail">
+                    <img src="/images/mt-booking/slideout-calendar.svg" alt="" />
+                    <span>Thursday, October 5, 2025</span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="booking-accordion booking-accordion--notes">
+                <h4 class="booking-accordion-heading">
+                  <button type="button" aria-expanded="false" aria-controls="booking-notes" data-accordion>
+                    Notes (1)
+                    <img src="/images/mt-booking/slideout-chevron-up.svg" alt="" />
+                  </button>
+                </h4>
+                <div class="booking-accordion-panel" id="booking-notes" hidden>
+                  <p class="booking-notes-label">Pinned Customer Notes</p>
+                  <div class="booking-note">
+                    <span class="booking-person" data-slideout-note-avatar>AW</span>
+                    <span class="booking-note-text">
+                      <span class="booking-note-name" data-slideout-note-name>Andre Wilson</span>
+                      <span data-slideout-note>Andre is coming back from a knee injury and will need lighter springs on the reformer.</span>
+                      <span class="booking-note-by">By Kendra Mack, September 5 2025, 10:00 am</span>
+                    </span>
+                    <img src="/images/mt-booking/slideout-kebab-h.svg" alt="" class="booking-note-menu" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="booking-accordion booking-accordion--attendees">
+                <h4 class="booking-accordion-heading">
+                  <button type="button" aria-expanded="true" aria-controls="booking-attendees" data-accordion>
+                    Attendees
+                    <img src="/images/mt-booking/slideout-chevron-up.svg" alt="" />
+                  </button>
+                </h4>
+                <div class="booking-accordion-panel" id="booking-attendees">
+                  <div class="booking-attendee">
+                    <span class="booking-person booking-person--large" data-slideout-avatar>AW</span>
+                    <span class="booking-attendee-text">
+                      <span class="booking-attendee-name">
+                        <span data-slideout-name>Andre Wilson</span>
+                        <span class="booking-vip" data-slideout-vip>VIP</span>
+                      </span>
+                      <span class="booking-attendee-sub" data-slideout-pack>10 Pilates Pack: 8/10 • Exp: 5/11/2026</span>
+                    </span>
+                    <button type="button" class="booking-checkin" data-slideout-checkin aria-pressed="false">
+                      <span class="booking-checkin-label">Check In</span>
+                      <svg viewBox="0 0 20 20" width="20" height="20" aria-hidden="true"><path d="m4.5 10.5 3.5 3.5 7.5-8" pathLength="1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <img src="/images/mt-booking/slideout-kebab.svg" alt="" class="booking-attendee-menu" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="booking-slideout-footer">
+              <button type="button" class="booking-slideout-button" data-slideout-close>Close</button>
+              <span class="booking-slideout-button booking-slideout-button--icon" aria-hidden="true">
+                <svg viewBox="0 0 20 20" width="20" height="20"><circle cx="4.5" cy="10" r="1.5" fill="#292632"/><circle cx="10" cy="10" r="1.5" fill="#292632"/><circle cx="15.5" cy="10" r="1.5" fill="#292632"/></svg>
+              </span>
+              <span class="booking-slideout-button booking-slideout-button--primary" aria-hidden="true">Edit Appointment</span>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <p class="white-label-hint booking-hint">Book a session and watch it land on the studio's calendar</p>
+
+    <div class="booking-again-slot">
+      <button type="button" class="booking-again" data-booking-again>
+        <span class="booking-again-progress" aria-hidden="true"></span>
+        Book another
+      </button>
+    </div>
+
+    <p class="booking-status" aria-live="polite" data-booking-status></p>
+  </div>
+  {caption && <figcaption class="figure-caption">{caption}</figcaption>}
+</figure>
+
+<script>
+  // Autoplay books these in turn, then clears the calendar and starts again
+  const PICKS = [
+    { trainer: 'marla', hour: 11, guest: false, checkIn: true },
+    { trainer: 'carol', hour: 8, guest: true, checkIn: false },
+    { trainer: 'marla', hour: 14, guest: false, checkIn: false }
+  ];
+  const IDLE_MS = 1000;
+  const PRESS_MS = 400;
+  const SHEET_MS = 1100;
+  const GUEST_MS = 900;
+  const TAP_MS = 180;
+  const LAND_MS = 350;
+  const SLIDEOUT_MS = 900;
+  const CHECKIN_MS = 1500;
+  const HOLD_MS = 4200;
+
+  // Who the appointment is for, as the slideout shows them: the member booking for themselves, or their guest
+  const PEOPLE = {
+    myself: {
+      name: 'Andre Wilson',
+      initials: 'AW',
+      vip: true,
+      detail: '10 Pilates Pack: 8/10 • Exp: 5/11/2026',
+      note: 'Andre is coming back from a knee injury and will need lighter springs on the reformer.'
+    },
+    guest: {
+      name: 'Lisa Wilson',
+      photo: '/images/mt-booking/lisa.webp',
+      vip: false,
+      detail: 'Guest of Andre Wilson',
+      note: 'Lisa has a shoulder injury that she is rehabbing and will need extra care getting set up.'
+    }
+  };
+
+  const label = (hour: number) => `${hour > 12 ? hour - 12 : hour}:00 ${hour < 12 ? 'AM' : 'PM'}`;
+
+  document.querySelectorAll<HTMLElement>('[data-booking]').forEach((root) => {
+    const app = root.querySelector<HTMLElement>('[data-booking-app]')!;
+    const sheet = root.querySelector<HTMLElement>('[data-booking-sheet]')!;
+    const slots = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-booking-slot]'));
+    const segments = root.querySelector<HTMLElement>('.booking-segments')!;
+    const forButtons = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-booking-for]'));
+    const reserveButton = root.querySelector<HTMLButtonElement>('[data-booking-reserve]')!;
+    const reserveIdle = root.querySelector<HTMLElement>('[data-booking-reserve-idle]')!;
+    const reserveDone = root.querySelector<HTMLElement>('[data-booking-reserve-done]')!;
+    const when = root.querySelector<HTMLElement>('[data-booking-when]')!;
+    const withTrainer = root.querySelector<HTMLElement>('[data-booking-with]')!;
+    const again = root.querySelector<HTMLButtonElement>('[data-booking-again]')!;
+    const status = root.querySelector<HTMLElement>('[data-booking-status]')!;
+    const cal = root.querySelector<HTMLElement>('[data-booking-cal]')!;
+    const slideout = root.querySelector<HTMLElement>('[data-booking-slideout]')!;
+    const checkIn = root.querySelector<HTMLButtonElement>('[data-slideout-checkin]')!;
+    const field = (name: string) => root.querySelector<HTMLElement>(`[data-slideout-${name}]`)!;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    type Phase = 'browsing' | 'sheet' | 'booked';
+    let phase: Phase = 'browsing';
+    let selected: HTMLButtonElement | null = null;
+    let reserveFor = 'myself';
+    let timers: number[] = [];
+    let next = 0;
+    let running = false;
+    let inView = false;
+    let userTookOver = false;
+    let detailsOpen = false;
+
+    const later = (fn: () => void, ms: number) => {
+      timers.push(window.setTimeout(fn, ms));
+    };
+
+    const clearTimers = () => {
+      timers.forEach((t) => window.clearTimeout(t));
+      timers = [];
+    };
+
+    const announce = (message: string) => {
+      status.textContent = message;
+    };
+
+    const trainerName = (slot: HTMLButtonElement) =>
+      root.querySelector<HTMLElement>(`[data-col="${slot.dataset.trainer}"]`)!.textContent!;
+
+    const setPhase = (value: Phase) => {
+      phase = value;
+      root.dataset.phase = value;
+      const sheetOpen = value !== 'browsing';
+      app.inert = sheetOpen;
+      sheet.inert = !sheetOpen;
+      // Reserve turns into Booked in place; only the visible face is read out
+      const booked = value === 'booked';
+      reserveButton.setAttribute('aria-disabled', String(booked));
+      reserveIdle.setAttribute('aria-hidden', String(booked));
+      reserveDone.setAttribute('aria-hidden', String(!booked));
+    };
+
+    const setFor = (value: string) => {
+      reserveFor = value;
+      segments.dataset.for = value;
+      forButtons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.bookingFor === value)));
+    };
+
+    const openSheet = (slot: HTMLButtonElement, byUser: boolean) => {
+      selected = slot;
+      const time = label(Number(slot.dataset.hour));
+      when.textContent = `Thursday, October 5, 2025 at ${time} PST`;
+      withTrainer.textContent = trainerName(slot);
+      setFor('myself');
+      setPhase('sheet');
+      if (byUser) {
+        // preventScroll: the sheet is still below the screen when it opens, and scrolling the screen to reach it
+        // would jump the phone's contents instead of letting the sheet slide up
+        forButtons[0].focus({ preventScroll: true });
+        announce(`${time} with ${trainerName(slot)}. Choose who it's for, then Reserve.`);
+      }
+    };
+
+    const setAvatar = (el: HTMLElement, person: { initials?: string; photo?: string }) => {
+      el.textContent = person.photo ? '' : person.initials!;
+      el.style.backgroundImage = person.photo ? `url(${person.photo})` : '';
+      el.classList.toggle('has-photo', Boolean(person.photo));
+    };
+
+    const setCheckedIn = (value: boolean) => {
+      checkIn.setAttribute('aria-pressed', String(value));
+    };
+
+    // The appointment's details slide out over the calendar, as in the admin: the rest of the day dims and the new
+    // appointment stays lit beside it
+    const openDetails = (slot: HTMLButtonElement, guest: boolean, tile: HTMLElement) => {
+      const person = PEOPLE[guest ? 'guest' : 'myself'];
+      const hour = Number(slot.dataset.hour);
+      const name = trainerName(slot);
+      field('with').textContent = `with ${name}`;
+      field('instructor').textContent = name;
+      field('time').textContent = `${label(hour)} - ${label(hour + 1)}`;
+      field('name').textContent = person.name;
+      field('pack').textContent = person.detail;
+      field('vip').hidden = !person.vip;
+      field('note-name').textContent = person.name;
+      field('note').textContent = person.note;
+      setAvatar(field('avatar'), person);
+      setAvatar(field('note-avatar'), person);
+      checkIn.setAttribute('aria-label', `Check in ${person.name}`);
+      setCheckedIn(false);
+      root.querySelectorAll('.booking-tile.is-spotlit').forEach((t) => t.classList.remove('is-spotlit'));
+      tile.classList.add('is-spotlit');
+      detailsOpen = true;
+      root.dataset.details = 'open';
+      slideout.inert = false;
+    };
+
+    const closeDetails = (byUser: boolean) => {
+      if (!detailsOpen) return;
+      const hadFocus = slideout.contains(document.activeElement);
+      detailsOpen = false;
+      root.dataset.details = 'closed';
+      slideout.inert = true;
+      root.querySelectorAll('.booking-tile.is-spotlit').forEach((t) => t.classList.remove('is-spotlit'));
+      if (byUser && hadFocus) (phase === 'booked' ? again : slots[0]).focus({ preventScroll: true });
+    };
+
+    const closeSheet = (byUser: boolean) => {
+      const was = selected;
+      closeDetails(false);
+      setPhase('browsing');
+      selected = null;
+      if (byUser) {
+        const open = slots.filter((s) => s.getAttribute('aria-disabled') !== 'true');
+        (open.find((s) => s.dataset.trainer === was?.dataset.trainer) ?? open[0])?.focus({ preventScroll: true });
+      }
+    };
+
+    // The new appointment drops into the instructor's column at the booked time, with a brief glow
+    const land = (slot: HTMLButtonElement, guest: boolean) => {
+      const hour = Number(slot.dataset.hour);
+      const name = trainerName(slot);
+      const col = root.querySelector<HTMLElement>(`[data-booking-col="${slot.dataset.trainer}"]`)!;
+      const head = root.querySelector<HTMLElement>(`[data-col="${slot.dataset.trainer}"]`)!;
+      const tile = document.createElement('div');
+      tile.className = 'booking-tile booking-tile--new';
+      tile.dataset.bookingNew = '';
+      tile.style.setProperty('--start', String((hour - 8) * 2));
+      tile.style.setProperty('--length', '2');
+      const parts: [string, string][] = [
+        ['time', `${label(hour)} - ${label(hour + 1)}`],
+        ['name', PEOPLE[guest ? 'guest' : 'myself'].name],
+        ['type', 'Pilates 1:1 60 mins']
+      ];
+      parts.forEach(([part, text]) => {
+        const span = document.createElement('span');
+        span.className = `booking-tile-${part}`;
+        span.textContent = text;
+        tile.append(span);
+      });
+      const meta = document.createElement('span');
+      meta.className = 'booking-tile-meta';
+      const who = document.createElement('span');
+      who.textContent = name;
+      const count = document.createElement('span');
+      count.className = 'booking-tile-count';
+      count.textContent = '1/1';
+      meta.append(who, count);
+      tile.append(meta);
+      col.append(tile);
+
+      // The calendar shows a few hours at a time, so bring the new appointment into view
+      const rowHeight = tile.offsetHeight / 2;
+      cal.scrollTo({ top: Math.max(0, tile.offsetTop - rowHeight), behavior: reduced.matches ? 'auto' : 'smooth' });
+
+      if (reduced.matches) {
+        tile.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 300, easing: 'ease' });
+      } else {
+        tile.animate(
+          [
+            { opacity: 0, transform: 'translateY(-40%) scale(0.96)' },
+            { opacity: 1, transform: 'translateY(0) scale(1)' }
+          ],
+          { duration: 550, easing: 'cubic-bezier(0.34, 1.4, 0.64, 1)' }
+        );
+      }
+      head.classList.remove('is-hit');
+      void head.offsetWidth;
+      head.classList.add('is-hit');
+      return tile;
+    };
+
+    // Reserve flips straight to Booked, and a beat later the appointment lands on the studio's calendar
+    const reserve = (byUser: boolean) => {
+      if (phase !== 'sheet' || !selected) return;
+      const slot = selected;
+      slot.setAttribute('aria-disabled', 'true');
+      slot.setAttribute('aria-label', `${slot.getAttribute('aria-label')}, booked`);
+      slot.classList.add('is-booked');
+      setPhase('booked');
+      const guest = reserveFor === 'guest';
+      // Not cancelled by a takeover, so a booking always reaches the calendar; skipped if the demo rewound meanwhile.
+      // The details follow once the new appointment has had a moment on its own.
+      window.setTimeout(() => {
+        if (!slot.classList.contains('is-booked')) return;
+        const tile = land(slot, guest);
+        window.setTimeout(() => {
+          if (phase === 'booked' && selected === slot) openDetails(slot, guest, tile);
+        }, reduced.matches ? 400 : SLIDEOUT_MS);
+      }, reduced.matches ? 0 : LAND_MS);
+      if (byUser) {
+        const name = trainerName(slot);
+        announce(`Booked. ${label(Number(slot.dataset.hour))} with ${name} is now on the studio's calendar, in ${name}'s column, with its details open beside it.`);
+      }
+    };
+
+    const clearBookings = () => {
+      root.querySelectorAll<HTMLElement>('[data-booking-new]').forEach((tile) => {
+        tile.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 300, easing: 'ease' }).onfinish = () => tile.remove();
+      });
+      slots.forEach((slot) => {
+        if (slot.getAttribute('aria-disabled') !== 'true') return;
+        slot.removeAttribute('aria-disabled');
+        slot.setAttribute('aria-label', slot.getAttribute('aria-label')!.replace(', booked', ''));
+        slot.classList.remove('is-booked');
+      });
+      cal.scrollTo({ top: 0, behavior: reduced.matches ? 'auto' : 'smooth' });
+    };
+
+    const bookAnother = (byUser: boolean) => {
+      // Once every time is taken, start the morning over
+      if (slots.every((s) => s.getAttribute('aria-disabled') === 'true')) clearBookings();
+      closeSheet(byUser);
+    };
+
+    // Autoplay: tap a time, the sheet comes up, pick Guest on some, tap Reserve, the calendar updates, then the next
+    const play = () => {
+      const pick = PICKS[next];
+      const slot = slots.find((s) => s.dataset.trainer === pick.trainer && Number(s.dataset.hour) === pick.hour)!;
+      let t = IDLE_MS;
+      later(() => slot.classList.add('is-pressed'), t);
+      t += PRESS_MS;
+      later(() => {
+        slot.classList.remove('is-pressed');
+        openSheet(slot, false);
+      }, t);
+      t += SHEET_MS;
+      if (pick.guest) {
+        later(() => setFor('guest'), t);
+        t += GUEST_MS;
+      }
+      later(() => reserveButton.classList.add('is-pressed'), t);
+      t += TAP_MS;
+      later(() => {
+        reserveButton.classList.remove('is-pressed');
+        reserve(false);
+      }, t);
+      t += LAND_MS + SLIDEOUT_MS;
+      if (pick.checkIn) {
+        later(() => checkIn.classList.add('is-pressed'), t + CHECKIN_MS);
+        later(() => {
+          checkIn.classList.remove('is-pressed');
+          setCheckedIn(true);
+        }, t + CHECKIN_MS + TAP_MS);
+      }
+      later(() => {
+        root.classList.remove('is-ticking');
+        void root.offsetWidth;
+        root.classList.add('is-ticking');
+      }, t);
+      t += HOLD_MS;
+      later(() => {
+        root.classList.remove('is-ticking');
+        closeSheet(false);
+        next = (next + 1) % PICKS.length;
+        if (next === 0) clearBookings();
+        play();
+      }, t);
+    };
+
+    const start = () => {
+      if (running || userTookOver || !inView || reduced.matches) return;
+      running = true;
+      root.classList.add('is-cycling');
+      play();
+    };
+
+    const stop = () => {
+      clearTimers();
+      running = false;
+      root.classList.remove('is-cycling', 'is-ticking');
+      [...slots, reserveButton, checkIn].forEach((b) => b.classList.remove('is-pressed'));
+    };
+
+    // Scrolled away or tab hidden: rewind, so it starts fresh next time
+    const pause = () => {
+      if (!running) return;
+      stop();
+      closeSheet(false);
+      clearBookings();
+      next = 0;
+    };
+
+    const takeOver = () => {
+      if (userTookOver) return;
+      userTookOver = true;
+      stop();
+    };
+
+    slots.forEach((slot) => {
+      slot.addEventListener('click', () => {
+        takeOver();
+        if (slot.getAttribute('aria-disabled') === 'true' || phase !== 'browsing') return;
+        openSheet(slot, true);
+      });
+    });
+
+    forButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        takeOver();
+        if (phase === 'sheet') setFor(button.dataset.bookingFor!);
+      });
+    });
+
+    reserveButton.addEventListener('click', () => {
+      takeOver();
+      reserve(true);
+    });
+
+    again.addEventListener('click', () => {
+      takeOver();
+      bookAnother(true);
+    });
+
+    root.querySelector('[data-booking-close]')!.addEventListener('click', () => {
+      takeOver();
+      if (phase === 'sheet' || phase === 'booked') bookAnother(true);
+    });
+
+    root.querySelectorAll('[data-slideout-close]').forEach((button) => {
+      button.addEventListener('click', () => {
+        takeOver();
+        closeDetails(true);
+      });
+    });
+
+    slideout.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      event.preventDefault();
+      closeDetails(true);
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('[data-accordion]').forEach((button) => {
+      button.addEventListener('click', () => {
+        takeOver();
+        const open = button.getAttribute('aria-expanded') !== 'true';
+        button.setAttribute('aria-expanded', String(open));
+        root.querySelector<HTMLElement>(`#${button.getAttribute('aria-controls')}`)!.hidden = !open;
+      });
+    });
+
+    checkIn.addEventListener('click', () => {
+      takeOver();
+      const checked = checkIn.getAttribute('aria-pressed') !== 'true';
+      setCheckedIn(checked);
+      announce(`${field('name').textContent} ${checked ? 'checked in' : 'no longer checked in'}.`);
+    });
+
+    sheet.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || (phase !== 'sheet' && phase !== 'booked')) return;
+      event.preventDefault();
+      bookAnother(true);
+    });
+
+    // Any touch on the phone or calendar hands control over, and keyboard users who tab in shouldn't have the demo
+    // moving under them
+    root.querySelector('.booking-pair')!.addEventListener('pointerdown', takeOver);
+    root.addEventListener('focusin', takeOver);
+
+    setPhase('browsing');
+    slideout.inert = true;
+
+    new IntersectionObserver(
+      ([entry]) => {
+        inView = entry.isIntersecting;
+        if (inView) start();
+        else pause();
+      },
+      { threshold: 0.5 }
+    ).observe(root);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) pause();
+      else start();
+    });
+  });
+</script>
