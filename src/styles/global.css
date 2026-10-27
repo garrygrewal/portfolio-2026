@@ -169,6 +169,15 @@ main {
 
 .header {
   padding: var(--space-32) var(--page-padding);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(
+    180deg,
+    rgba(17, 17, 17, 0.92) 0%,
+    rgba(17, 17, 17, 0.72) 55%,
+    rgba(17, 17, 17, 0) 100%
+  );
   view-transition-name: site-header;
 }
 
@@ -213,15 +222,8 @@ main {
 }
 
 @media (max-width: 768px) {
-  .header {
-    position: relative;
-    z-index: 100;
-  }
-
   .header.is-menu-open {
     color: #111111;
-    position: sticky;
-    top: 0;
   }
 
   .header-content {
