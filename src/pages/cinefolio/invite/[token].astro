@@ -1,0 +1,107 @@
+---
+// Landing page for Cinefolio friend invites: https://www.grewal.design/cinefolio/invite/<token>
+//
+// With the app installed, iOS opens these links in Cinefolio (see /.well-known/apple-app-site-association).
+// This page is only for people who don't have the app yet, or whose browser didn't hand the link over.
+// It never looks the token up. The app does that once it's installed.
+// Don't move or rename it: invites already sent point here. See "Cinefolio" in the README.
+import Layout from '../../../layouts/Layout.astro';
+
+export const prerender = false;
+
+// TODO(Garry): replace with the TestFlight public link for Cinefolio.
+const TESTFLIGHT_URL = 'https://testflight.apple.com/join/PLACEHOLDER';
+
+const SITE = 'https://www.grewal.design';
+const title = "You're invited to Cinefolio";
+const description = 'Cinefolio is a film log for iPhone. Join the beta, then add your friend with the code from their invite.';
+const pageUrl = new URL(Astro.url.pathname, SITE).href;
+
+Astro.response.headers.set('X-Robots-Tag', 'noindex');
+---
+
+<Layout title={title}>
+  <Fragment slot="head">
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Cinefolio" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={pageUrl} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+  </Fragment>
+
+  <div class="invite">
+    <h1 class="invite-title">{title}</h1>
+    <div class="invite-body">
+      <p>A friend wants to share what they watch with you. Cinefolio is a film log for iPhone, in beta on TestFlight.</p>
+      <ol class="invite-steps">
+        <li>
+          <a href={TESTFLIGHT_URL} class="link-underline" rel="noopener noreferrer">Install Cinefolio from TestFlight</a>.
+        </li>
+        <li>Open Cinefolio and sign in.</li>
+        <li>Open this link again, or type the code from your invite, like K7P-2QM, in the app.</li>
+      </ol>
+      <p class="invite-note">Already have Cinefolio? This link should open it. If it didn't, type the code from your invite in the app.</p>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .invite {
+    padding: var(--space-64) 0 var(--space-96);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-32);
+  }
+
+  @media (min-width: 768px) {
+    .invite {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      column-gap: var(--space-24);
+      align-items: baseline;
+    }
+
+    .invite-title {
+      grid-column: 1 / 7;
+    }
+
+    .invite-body {
+      grid-column: 7 / -1;
+      min-width: 0;
+    }
+  }
+
+  .invite-title {
+    font-size: 48px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    word-spacing: 0.08em;
+  }
+
+  .invite-body p,
+  .invite-steps li {
+    max-width: 36ch;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+
+  .invite-steps {
+    margin: 1.2em 0;
+    padding-left: 1.2em;
+  }
+
+  .invite-steps li + li {
+    margin-top: 0.6em;
+  }
+
+  .invite-note {
+    color: var(--color-muted);
+  }
+</style>

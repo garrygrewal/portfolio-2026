@@ -16,6 +16,7 @@ URLs
 - /mariana-tek-year-in-motion
 - /xplor-rec-mobile
 - /q4-capital-connect
+- /cinefolio/invite/<token> and /.well-known/apple-app-site-association (Cinefolio app links, see README)
 
 Visual system
 - Background: #ffffff
